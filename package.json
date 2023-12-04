@@ -1,0 +1,8 @@
+{
+  "name": "do",
+  "version": "1.0.0",
+  "author": "mr-josh",
+  "workspaces": [
+    "package"
+  ]
+}
