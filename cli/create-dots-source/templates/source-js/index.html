@@ -6,18 +6,30 @@
     <title>Source Testing</title>
   </head>
   <body class="flex flex-col gap-2 overflow-x-hidden">
-    <h1>Source</h1>
+    <h1 class="font-bold text-3xl">Source Preview</h1>
     <div class="grid grid-cols-3 gap-2">
       <dots-editor class="w-full col-span-2" inspector="ei"></dots-editor>
-      <div id="ei"></div>
+      <div id="ei" class="inspector">
+        <h2 class="font-bold text-xl">Inspector</h2>
+      </div>
     </div>
-    <button id="build-scene" type="button">Build Scene</button>
-    <div id="built" class="max-w-md bg-black bg-opacity-50"></div>
     <script type="module" src="./main.js"></script>
     <style>
       @tailwind base;
       @tailwind components;
       @tailwind utilities;
+
+      .inspector .inspector-controls {
+        @apply flex flex-col gap-2;
+      }
+
+      .inspector .inspector-controls h3 {
+        @apply underline;
+      }
+
+      .inspector .inspector-controls .control {
+        @apply flex justify-between;
+      }
     </style>
   </body>
 </html>

@@ -28,16 +28,18 @@
 </script>
 
 <div class="transform">
+  <h3>Transform</h3>
   {#each transformKeys as param}
-    <div>
+    <div class="control">
       <label for={param}>{param}</label>
       <input type="number" name={param} bind:value={transform[param]} />
     </div>
   {/each}
 </div>
 <div class="options">
+  <h3>Options</h3>
   {#each Object.keys(options) as option}
-    <div>
+    <div class="control">
       <label for={option}>{option}</label>
       <input
         type={typeof options[option] === "boolean"

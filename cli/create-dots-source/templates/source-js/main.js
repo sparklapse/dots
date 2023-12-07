@@ -9,14 +9,6 @@ if (/[a-z0-9-]/.test(label) === false)
 
 customElements.whenDefined("dots-editor").then(async () => {
   const editor = document.querySelector("dots-editor");
-  const buildButton = document.getElementById("build-scene");
-
-  buildButton.addEventListener("click", () => {
-    const scene = buildScene(editor.sources);
-    const built = document.getElementById("built");
-    built.innerHTML = scene;
-  });
-
   const source = await customElements.whenDefined("source-" + label);
   const { transform, options } = source.defaultProps;
 

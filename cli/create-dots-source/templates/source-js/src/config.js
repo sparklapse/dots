@@ -6,11 +6,6 @@ export const label = "component";
 
 /**
  * The options people can use to configure your source.
- * @example
- * // The key of the option, and the default value
- * options = {
- *  color: "red"
- * }
  * @type {Record<string, any>}
  */
 export const options = {
