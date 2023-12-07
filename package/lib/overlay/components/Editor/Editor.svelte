@@ -3,12 +3,25 @@
   import type { DotsScreen } from "../Screen/web";
   import type { Sources } from "../../scene";
   import Inspector from "./Inspector.svelte";
+  import { onDestroy } from "svelte";
 
   export let screen: DotsScreen;
   export let sources: Sources = [];
+  let inspectorMount: string | undefined;
+  export { inspectorMount as inspector };
 
   let inspector: HTMLDivElement;
   let selected = -1;
+
+  $: if (inspector && inspectorMount) {
+    const mount = document.getElementById(inspectorMount);
+    console.log(mount);
+    if (mount) mount.appendChild(inspector);
+  }
+
+  onDestroy(() => {
+    if (inspector) inspector.remove();
+  });
 </script>
 
 <dots-screen bind:this={screen}>
@@ -17,15 +30,22 @@
     <svelte:element this={tag} {...transform} {...options} />
   {/each}
   <div class="window" slot="window">
-    {#each sources as { transform }, i}
-      <Editable on:selected={() => (selected = i)} bind:transform />
+    {#each sources as _, i}
+      <Editable
+        selected={selected == i}
+        on:selected={() => (selected = i)}
+        bind:transform={sources[i].transform}
+      />
     {/each}
   </div>
 </dots-screen>
 
 {#if selected !== -1}
-  <div bind:this={inspector}>
-    <Inspector bind:options={sources[selected].options} />
+  <div class="inspector-controls" bind:this={inspector}>
+    <Inspector
+      bind:transform={sources[selected].transform}
+      bind:options={sources[selected].options}
+    />
   </div>
 {/if}
 

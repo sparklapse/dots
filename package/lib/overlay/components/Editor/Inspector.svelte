@@ -1,5 +1,10 @@
 <script lang="ts">
+  import type { Transform } from "../../scene";
+
   export let options: { [key: string]: any };
+  export let transform: Transform;
+
+  const transformKeys = Object.keys(transform) as (keyof Transform)[];
 
   const handleChange =
     (option: string) =>
@@ -22,8 +27,15 @@
     };
 </script>
 
-<h2>Inspector</h2>
-<div>
+<div class="transform">
+  {#each transformKeys as param}
+    <div>
+      <label for={param}>{param}</label>
+      <input type="number" name={param} bind:value={transform[param]} />
+    </div>
+  {/each}
+</div>
+<div class="options">
   {#each Object.keys(options) as option}
     <div>
       <label for={option}>{option}</label>

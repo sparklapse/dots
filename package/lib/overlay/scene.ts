@@ -1,4 +1,4 @@
-type Transform = { x: number; y: number; width: number; height: number };
+export type Transform = { x: number; y: number; width: number; height: number };
 export type Sources = { tag: string; transform: Transform; options: any }[];
 
 export const buildScene = (sources: Sources) => {
