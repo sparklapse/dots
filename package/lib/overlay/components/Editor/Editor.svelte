@@ -25,11 +25,12 @@
 </script>
 
 <dots-screen bind:this={screen}>
-  <div class="bg"></div>
+  <div class="bg" />
   {#each sources as { tag, transform, options }}
     <svelte:element this={tag} {...transform} {...options} />
   {/each}
   <div class="window" slot="window">
+    <div class="catch" on:pointerdown={() => (selected = -1)} />
     {#each sources as _, i}
       <Editable
         selected={selected == i}
@@ -56,8 +57,17 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
   }
+
+  .catch {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+  }
+
   .window {
     width: 100%;
     height: 100%;
+    isolation: isolate;
   }
 </style>

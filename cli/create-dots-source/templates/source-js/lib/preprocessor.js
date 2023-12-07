@@ -1,10 +1,10 @@
-import { options } from "../src/config";
-
 /** @type {import("svelte/compiler").PreprocessorGroup} */
 export const dotsPreprocess = {
   name: "dots-preprocess",
   script: async ({ content, filename }) => {
     if (!filename?.endsWith("lib/Source.svelte")) return;
+
+    const { options } = await import("../src/config");
 
     // Define the options as reactive props
     const optionKeys = Object.keys(options);
@@ -24,9 +24,11 @@ export const dotsPreprocess = {
   markup: async ({ content, filename }) => {
     if (!filename?.endsWith("lib/Source.svelte")) return;
 
+    const { options } = await import("../src/config");
+
     // Define the options as bindings to the custom element
     const optionKeys = Object.keys(options);
-    const optionBindings = optionKeys.map((option) => `bind:${option}`).join(" ");
+    const optionBindings = optionKeys.map((option) => `{${option}}`).join(" ");
     content = content.replace(/\$use-options/g, optionBindings);
 
     return {

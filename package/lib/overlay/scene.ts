@@ -6,7 +6,10 @@ export const buildScene = (sources: Sources) => {
 
   for (const source of sources) {
     const props = Object.entries({ ...source.transform, ...source.options })
-      .map(([key, value]) => `${key}="${value}"`)
+      .map(([key, value]) => {
+        if (typeof value === "boolean" && !value) return "";
+        return `${key}="${value}"`;
+      })
       .join(" ");
     scene += `<${source.tag} ${props}></${source.tag}>`;
   }
