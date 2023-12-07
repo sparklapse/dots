@@ -4,6 +4,6 @@
   "author": "mr-josh",
   "workspaces": [
     "package",
-    "templates/source"
+    "cli/create-dots-source"
   ]
 }

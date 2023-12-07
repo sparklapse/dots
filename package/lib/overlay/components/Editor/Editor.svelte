@@ -1,24 +1,22 @@
 <script lang="ts">
-  import type { DotsScene } from "../Scene/web";
   import Editable from "./Editable.svelte";
+  import type { DotsScreen } from "../Screen/web";
+  import type { Sources } from "../../scene";
 
-  export let screen: DotsScene;
-  export let scene: {
-    tag: string;
-    props: { x: number; y: number; width: number; height: number };
-  }[] = [];
+  export let screen: DotsScreen;
+  export let sources: Sources = [];
 </script>
 
-<dots-scene bind:this={screen}>
-  {#each scene as { tag, props }}
+<dots-screen bind:this={screen}>
+  {#each sources as { tag, props }}
     <svelte:element this={tag} {...props} />
   {/each}
   <div class="window" slot="window">
-    {#each scene as { props }}
+    {#each sources as { props }}
       <Editable bind:props />
     {/each}
   </div>
-</dots-scene>
+</dots-screen>
 
 <style>
   .window {

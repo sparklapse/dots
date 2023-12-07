@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Source Testing</title>
+  </head>
+  <body class="flex flex-col gap-2 overflow-x-hidden">
+    <h1>Source</h1>
+    <dots-editor></dots-editor>
+    <button id="build-scene">Build Scene</button>
+    <div id="built" class="max-w-md bg-black bg-opacity-50"></div>
+    <script type="module" src="./main.js"></script>
+    <style>
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    </style>
+  </body>
+</html>

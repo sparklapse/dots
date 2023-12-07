@@ -1,0 +1,4 @@
+{
+  "name": "@sparklapse/create-dots-source",
+  "bin": "./bin.js"
+}

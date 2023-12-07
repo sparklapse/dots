@@ -1,6 +1,5 @@
 {
   "name": "@sparklapse/dots",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "files": [
@@ -11,6 +10,11 @@
       "default": "./dist/dots-overlay.js",
       "import": "./dist/dots-overlay.js",
       "require": "./dist/dots-overlay.js"
+    },
+    "./overlay/scene": {
+      "default": "./dist/dots-overlay-scene.js",
+      "import": "./dist/dots-overlay-scene.js",
+      "types": "./dist/scene.d.ts"
     }
   },
   "scripts": {

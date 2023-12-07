@@ -22,9 +22,6 @@ const plugins = [
     exportConditions: ["svelte"],
     extensions: [".svelte"],
   }),
-  typescript({
-    tsconfig: "./tsconfig.build.json",
-  }),
   terser(),
 ];
 
@@ -35,8 +32,34 @@ export default [
     output: {
       file: "./dist/dots-overlay.js",
       format: "iife",
+      sourcemap: true,
     },
     treeshake: true,
-    plugins: plugins,
+    plugins: [
+      ...plugins,
+      typescript({
+        tsconfig: "./tsconfig.build.json",
+      }),
+    ],
+  },
+  {
+    input: "./lib/overlay/scene.ts",
+    output: {
+      file: "./dist/dots-overlay-scene.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    treeshake: true,
+    plugins: [
+      ...plugins,
+      typescript({
+        tsconfig: "./tsconfig.build.json",
+        compilerOptions: {
+          declaration: true,
+          outDir: "./dist",
+        },
+        include: ["./lib/overlay/scene.ts"],
+      }),
+    ],
   },
 ];
