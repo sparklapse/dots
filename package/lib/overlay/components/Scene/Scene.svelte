@@ -1,15 +1,20 @@
 <script lang="ts">
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import type { ScreenContext } from "../contexts/screen";
+  import type { Readable } from "svelte/store";
+  import type { ScreenContext } from "../../contexts/screen";
 
   export let width: number = 1920;
   export let height: number = 1080;
 
+  const scale = writable<number>(-1);
+  const rs = {
+    subscribe: scale.subscribe,
+  } as Readable<number>;
+  export { rs as scale };
+
   let container: HTMLDivElement;
   let screen: HTMLDivElement;
-
-  let scale = writable<number>(-1);
 
   setContext<ScreenContext>("screen", {
     scale,
@@ -39,7 +44,6 @@
     class="window"
     style:width={`${Math.round(width * $scale)}px`}
     style:height={`${Math.round(height * $scale)}px`}
-    data-dots-screen
   >
     <div
       class="screen"
@@ -80,7 +84,10 @@
 
   .window-overlay {
     position: relative;
+    width: 100%;
+    height: 100%;
     z-index: 10;
+    overflow: hidden;
   }
 
   .placeholder {
