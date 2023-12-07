@@ -6,8 +6,13 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    // Unhide the lib folder if you want full control of your source
-    "lib/": true
+    // Unhide the following if you want full control of your source
+    "lib/": true,
+    "index.html": true,
+    "main.js": true,
+    "postcss.config.js": true,
+    "tailwind.config.js": true,
+    "vite.config.js": true
   },
   "editor.tabSize": 2,
   "editor.detectIndentation": false,

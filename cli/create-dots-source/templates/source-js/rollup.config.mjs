@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 
 import { label } from "./src/config.js";
+import { dotsPreprocess } from "./lib/preprocessor.js";
 
 if (/[a-z0-9-]/.test(label) === false) {
   throw new Error("sourceLabel must be alphanumeric with dashes");
@@ -17,6 +18,7 @@ export default {
   },
   plugins: [
     svelte({
+      preprocess: [dotsPreprocess],
       emitCss: false,
       compilerOptions: {
         css: "injected",

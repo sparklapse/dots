@@ -7,7 +7,7 @@ import { label } from "./src/config";
 if (/[a-z0-9-]/.test(label) === false)
   throw new Error("sourceLabel must be lower alphanumeric with dashes");
 
-customElements.whenDefined("dots-editor").then(() => {
+customElements.whenDefined("dots-editor").then(async () => {
   const editor = document.querySelector("dots-editor");
   const buildButton = document.getElementById("build-scene");
 
@@ -17,11 +17,15 @@ customElements.whenDefined("dots-editor").then(() => {
     built.innerHTML = scene;
   });
 
+  const source = await customElements.whenDefined("source-" + label);
+  const { transform, options } = source.defaultProps;
+
   editor.sources = [
     ...editor.sources,
     {
       tag: "source-" + label,
-      props: { x: 100, y: 100, width: 100, height: 100 },
+      transform,
+      options,
     },
   ];
 });

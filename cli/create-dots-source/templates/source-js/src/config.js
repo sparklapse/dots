@@ -1,7 +1,31 @@
+/**
+ * You component will be named with this label.
+ * @type {string}
+ */
 export const label = "component";
-export const defaultTransform = {
-  x: 0,
-  y: 0,
-  width: 100,
-  height: 100,
+
+/**
+ * The options people can use to configure your source.
+ * @example
+ * // The key of the option, and the default value
+ * options = {
+ *  color: "red"
+ * }
+ * @type {Record<string, any>}
+ */
+export const options = {
+  color: "red",
+  fontSize: 32,
+  flip: false,
+};
+
+/**
+ * The default size and position when your source is added.
+ * @type {{x: number, y: number, width: number, height: number}}
+ */
+export const transform = {
+  x: 100,
+  y: 100,
+  width: 200,
+  height: 200,
 };

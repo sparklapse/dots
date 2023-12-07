@@ -1,16 +1,20 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   let editable: HTMLDivElement;
   let isDragging: boolean = false;
   let dragType: "move" | "resize";
   let dragCorner: "nw" | "ne" | "sw" | "se";
 
   export let selected: boolean = false;
-  export let props: {
+  export let transform: {
     x: number;
     y: number;
     width: number;
     height: number;
   };
+
+  const dispatch = createEventDispatcher<{ selected: void }>();
 
   const dragHandle = (type: typeof dragType, corner?: typeof dragCorner) => {
     return (
@@ -43,18 +47,18 @@
 
     switch (dragType) {
       case "move": {
-        props = {
-          ...props,
-          x: props.x + ev.movementX / scale,
-          y: props.y + ev.movementY / scale,
+        transform = {
+          ...transform,
+          x: transform.x + ev.movementX / scale,
+          y: transform.y + ev.movementY / scale,
         };
         break;
       }
       case "resize": {
-        let x = props.x;
-        let width = props.width;
-        let y = props.y;
-        let height = props.height;
+        let x = transform.x;
+        let width = transform.width;
+        let y = transform.y;
+        let height = transform.height;
 
         if (dragCorner.startsWith("n")) {
           y += ev.movementY / scale;
@@ -70,8 +74,8 @@
           width += ev.movementX / scale;
         }
 
-        props = {
-          ...props,
+        transform = {
+          ...transform,
           x,
           y,
           height,
@@ -88,11 +92,14 @@
 
 <div
   class={"editable" + (selected || isDragging ? " selected" : "")}
-  style:left={`calc(${props.x}px * var(--dots-screen-scale))`}
-  style:top={`calc(${props.y}px * var(--dots-screen-scale))`}
-  style:width={`calc(${props.width}px * var(--dots-screen-scale))`}
-  style:height={`calc(${props.height}px * var(--dots-screen-scale))`}
-  on:pointerdown={dragHandle("move")}
+  style:left={`calc(${transform.x}px * var(--dots-screen-scale))`}
+  style:top={`calc(${transform.y}px * var(--dots-screen-scale))`}
+  style:width={`calc(${transform.width}px * var(--dots-screen-scale))`}
+  style:height={`calc(${transform.height}px * var(--dots-screen-scale))`}
+  on:pointerdown={(ev) => {
+    dispatch("selected");
+    dragHandle("move")(ev);
+  }}
   bind:this={editable}
 >
   <div
