@@ -4,7 +4,7 @@ export const dotsPreprocess = {
   script: async ({ content, filename }) => {
     if (!filename?.endsWith("lib/Source.svelte")) return;
 
-    const { options } = await import("../src/config");
+    const { options } = await import("../src/config.js");
 
     // Define the options as reactive props
     const optionKeys = Object.keys(options);
@@ -24,7 +24,7 @@ export const dotsPreprocess = {
   markup: async ({ content, filename }) => {
     if (!filename?.endsWith("lib/Source.svelte")) return;
 
-    const { options } = await import("../src/config");
+    const { options } = await import("../src/config.js");
 
     // Define the options as bindings to the custom element
     const optionKeys = Object.keys(options);
