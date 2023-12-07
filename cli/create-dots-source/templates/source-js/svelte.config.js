@@ -4,7 +4,6 @@ import { dotsPreprocess } from "./lib/preprocessor.js";
 export default {
   preprocess: [dotsPreprocess],
   compilerOptions: {
-    css: "injected",
     customElement: true,
   },
 };
