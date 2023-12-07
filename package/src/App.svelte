@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "../lib/overlay/components";
+  import "../lib/overlay";
 </script>
 
 <div class="flex flex-col gap-2">
