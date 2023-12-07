@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { onMount, setContext } from "svelte";
+  import { onMount } from "svelte";
   import { writable } from "svelte/store";
   import type { Readable } from "svelte/store";
-  import type { ScreenContext } from "../../contexts/screen";
 
   export let width: number = 1920;
   export let height: number = 1080;
@@ -15,10 +14,6 @@
 
   let container: HTMLDivElement;
   let screen: HTMLDivElement;
-
-  setContext<ScreenContext>("screen", {
-    scale,
-  });
 
   onMount(() => {
     const resize = () => {

@@ -1,26 +1,26 @@
 {
-  "name": "@sparklapse/dots-overlay",
+  "name": "@sparklapse/dots",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
-  "main": "./dist/counter.umd.cjs",
-  "module": "./dist/counter.js",
-  "types": "./index.d.ts",
   "exports": {
-    "types": "./index.d.ts",
-    "import": "./dist/counter.js",
-    "require": "./dist/counter.umd.cjs"
+    "./overlay": {
+      "default": "./dist/dots-overlay.js",
+      "import": "./dist/dots-overlay.js",
+      "require": "./dist/dots-overlay.js"
+    }
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build",
-    "ct": "bun run ./lib/overlay/source/compiler.ts"
+    "build": "rollup -c"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tsconfig/svelte": "^5.0.2",
     "autoprefixer": "^10.4.16",
@@ -28,12 +28,13 @@
     "prettier": "^3.1.0",
     "prettier-plugin-svelte": "^3.1.2",
     "prettier-plugin-tailwindcss": "^0.5.9",
+    "svelte-preprocess": "^5.1.1",
     "tailwindcss": "^3.3.6",
-    "typescript": "^5.2.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "clsx": "^2.0.0",
     "svelte": "^4.2.8"
   }
 }

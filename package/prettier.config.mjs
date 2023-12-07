@@ -11,6 +11,5 @@ export default {
   jsxSingleQuote: false,
   singleAttributePerLine: false,
   plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-  tailwindFunctions: ["cx", "clsx"],
   overrides: [{ files: "*.svelte", options: { parser: "svelte" } }],
 };

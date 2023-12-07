@@ -87,7 +87,7 @@
 />
 
 <div
-  class={"editable" + (selected ? " selected" : "")}
+  class={"editable" + (selected || isDragging ? " selected" : "")}
   style:left={`calc(${props.x}px * var(--dots-screen-scale))`}
   style:top={`calc(${props.y}px * var(--dots-screen-scale))`}
   style:width={`calc(${props.width}px * var(--dots-screen-scale))`}

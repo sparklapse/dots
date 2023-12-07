@@ -7,4 +7,8 @@ type SceneProps = {
 };
 const Element = (Scene as WebComponent<typeof Scene, SceneProps>).element;
 
-export class DotsScene extends Element {}
+export class DotsScene extends Element {
+  constructor() {
+    super();
+  }
+}

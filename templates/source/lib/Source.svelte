@@ -1,10 +1,12 @@
 <script>
   import Component from "../src/Component.svelte";
+  import { defaultTransform } from "../src/config";
 
-  export let x = 0;
-  export let y = 0;
-  export let width = 100;
-  export let height = 100;
+  // Required for editor transformation
+  export let x = defaultTransform.x;
+  export let y = defaultTransform.y;
+  export let width = defaultTransform.width;
+  export let height = defaultTransform.height;
 </script>
 
 <div
@@ -14,7 +16,7 @@
   style:width={`${width}px`}
   style:height={`${height}px`}
 >
-  <Component />
+  <Component transform={{ x, y, width, height }} />
 </div>
 
 <style>

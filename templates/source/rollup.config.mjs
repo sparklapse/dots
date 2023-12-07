@@ -2,9 +2,9 @@ import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 
-import { sourceLabel } from "./src/config.js";
+import { label } from "./src/config.js";
 
-if (/[a-zA-Z0-9-]/.test(sourceLabel) === false) {
+if (/[a-z0-9-]/.test(label) === false) {
   throw new Error("sourceLabel must be alphanumeric with dashes");
 }
 
@@ -12,7 +12,7 @@ if (/[a-zA-Z0-9-]/.test(sourceLabel) === false) {
 export default {
   input: "./lib/main.js",
   output: {
-    file: `./dist/source-${sourceLabel}.js`,
+    file: `./dist/source-${label}.js`,
     format: "iife",
   },
   plugins: [
@@ -20,6 +20,7 @@ export default {
       emitCss: false,
       compilerOptions: {
         css: "injected",
+        customElement: true,
       },
     }),
     resolve({

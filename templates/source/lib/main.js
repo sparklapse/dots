@@ -1,5 +1,5 @@
 import Source from "./Source.svelte";
-import { sourceLabel } from "../src/config";
+import { label } from "../src/config";
 
 const DotsSource = class extends Source.element {
   get transform() {
@@ -12,4 +12,4 @@ const DotsSource = class extends Source.element {
   }
 };
 
-customElements.define("source-" + sourceLabel, DotsSource);
+customElements.define("source-" + label, DotsSource);
