@@ -17,14 +17,18 @@
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "ct": "bun run ./lib/overlay/source/compiler.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tsconfig/svelte": "^5.0.2",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
     "prettier": "^3.1.0",
     "prettier-plugin-svelte": "^3.1.2",
     "prettier-plugin-tailwindcss": "^0.5.9",
+    "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
   },

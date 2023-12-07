@@ -5,10 +5,12 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
+    "**/Thumbs.db": true,
+    // Unhide the lib folder if you want full control of your source
+    "lib/": true
   },
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "eslint.workingDirectories": ["package", "templates/source"],
+  "eslint.workingDirectories": ["src"],
   "editor.rulers": [100]
 }
