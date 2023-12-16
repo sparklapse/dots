@@ -6,6 +6,7 @@ export default defineConfig({
   resolve: {
     alias: {
       $lib: resolve("./lib"),
+      $dist: resolve("./dist"),
     },
   },
   plugins: [

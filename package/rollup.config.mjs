@@ -27,10 +27,11 @@ const plugins = [
 
 /** @type {import("rollup").RollupOptions[]} */
 export default [
+  // Screen web component
   {
-    input: "./lib/overlay/index.ts",
+    input: "./lib/overlay/screen/index.ts",
     output: {
-      file: "./dist/dots-overlay.js",
+      file: "./dist/overlay/dots-screen.js",
       format: "iife",
       sourcemap: true,
     },
@@ -42,10 +43,11 @@ export default [
       }),
     ],
   },
+  // Editor Library
   {
-    input: "./lib/overlay/scene/index.ts",
+    input: "./lib/overlay/editor/index.ts",
     output: {
-      file: "./dist/dots-overlay-scene.js",
+      file: "./dist/overlay/dots-editor.js",
       format: "esm",
       sourcemap: true,
     },
@@ -54,18 +56,29 @@ export default [
       ...plugins,
       typescript({
         tsconfig: "./tsconfig.build.json",
-        compilerOptions: {
-          declaration: true,
-          outDir: "./dist",
-        },
-        include: ["./lib/overlay/scene.ts"],
+      }),
+    ],
+  },
+  // Scene library
+  {
+    input: "./lib/overlay/scene/index.ts",
+    output: {
+      file: "./dist/overlay/dots-scene.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    treeshake: true,
+    plugins: [
+      ...plugins,
+      typescript({
+        tsconfig: "./tsconfig.build.json",
       }),
     ],
   },
   {
-    input: "./lib/overlay/components/fields/index.ts",
+    input: "./lib/main.ts",
     output: {
-      file: "./dist/dots-overlay-component-fields.js",
+      file: "./dist/index.js",
       format: "esm",
       sourcemap: true,
     },
@@ -78,7 +91,6 @@ export default [
           declaration: true,
           outDir: "./dist",
         },
-        include: ["./lib/overlay/components/fields/index.ts"],
       }),
     ],
   },

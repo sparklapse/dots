@@ -7,15 +7,16 @@
     "README.md"
   ],
   "exports": {
-    "./overlay": {
-      "default": "./dist/dots-overlay.js",
-      "import": "./dist/dots-overlay.js",
-      "require": "./dist/dots-overlay.js"
+    "./overlay/screen": {
+      "default": "./dist/overlay/dots-screen.js",
+      "import": "./dist/overlay/dots-screen.js",
+      "require": "./dist/overlay/dots-screen.js"
     },
+    
     "./overlay/scene": {
       "default": "./dist/dots-overlay-scene.js",
       "import": "./dist/dots-overlay-scene.js",
-      "types": "./dist/scene.d.ts"
+      "types": "./dist/overlay/scene/index.d.ts"
     }
   },
   "scripts": {
@@ -34,6 +35,7 @@
     "prettier": "^3.1.0",
     "prettier-plugin-svelte": "^3.1.2",
     "prettier-plugin-tailwindcss": "^0.5.9",
+    "rollup-plugin-svelte": "^7.1.6",
     "svelte-preprocess": "^5.1.1",
     "tailwindcss": "^3.3.6",
     "tslib": "^2.6.2",

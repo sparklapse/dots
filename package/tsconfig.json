@@ -2,7 +2,8 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "$lib/*": ["./lib/*"]
+      "$lib/*": ["./lib/*"],
+      "$dist/*": ["./dist/*"],
     },
     "target": "ESNext",
     "useDefineForClassFields": true,

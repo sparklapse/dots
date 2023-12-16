@@ -1,10 +1,9 @@
 <script lang="ts">
-  import "$lib/overlay";
   import "./component";
   import type { DotsSource } from "./component";
   import { onMount } from "svelte";
   import Editor from "$lib/overlay/editor/Editor.svelte";
-  import type { Sources } from "$lib/overlay/scene";
+  import type { Sources } from "$dist/overlay/scene";
 
   let sources: Sources = [];
   onMount(async () => {

@@ -1,6 +1,6 @@
 <script lang="ts">
+  import "$dist/overlay/dots-screen";
   import type { SvelteComponent } from "svelte";
-  import "../lib/overlay";
 
   const tests: Record<string, { default: typeof SvelteComponent }> = import.meta.glob(
     "./tests/**/Page.svelte",
