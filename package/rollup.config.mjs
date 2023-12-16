@@ -43,7 +43,7 @@ export default [
     ],
   },
   {
-    input: "./lib/overlay/scene.ts",
+    input: "./lib/overlay/scene/index.ts",
     output: {
       file: "./dist/dots-overlay-scene.js",
       format: "esm",
@@ -59,6 +59,26 @@ export default [
           outDir: "./dist",
         },
         include: ["./lib/overlay/scene.ts"],
+      }),
+    ],
+  },
+  {
+    input: "./lib/overlay/components/fields/index.ts",
+    output: {
+      file: "./dist/dots-overlay-component-fields.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    treeshake: true,
+    plugins: [
+      ...plugins,
+      typescript({
+        tsconfig: "./tsconfig.build.json",
+        compilerOptions: {
+          declaration: true,
+          outDir: "./dist",
+        },
+        include: ["./lib/overlay/components/fields/index.ts"],
       }),
     ],
   },

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Editable from "./Editable.svelte";
-  import type { DotsScreen } from "../Screen/web";
+  import type { DotsScreen } from "../screen/web";
   import type { Sources } from "../../scene";
   import Inspector from "./Inspector.svelte";
   import { onDestroy } from "svelte";

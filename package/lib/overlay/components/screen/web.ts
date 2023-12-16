@@ -4,7 +4,6 @@ import type { WebComponent } from "../types";
 
 type ScreenProps = {
   scale: Readable<number>;
-  scene: { tag: string; props: any }[];
 };
 const Element = (Screen as WebComponent<typeof Screen, ScreenProps>).element;
 

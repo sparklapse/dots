@@ -1,9 +1,11 @@
 import Editor from "./Editor.svelte";
 import type { WebComponent } from "../types";
-import type { DotsScreen } from "../Screen/web";
+import type { DotsScreen } from "../screen/web";
+import type { Sources } from "../../scene";
 
 type EditorProps = {
   screen: DotsScreen;
+  sources: Sources;
 };
 const Element = (Editor as WebComponent<typeof Editor, EditorProps>).element;
 
