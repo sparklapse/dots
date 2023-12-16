@@ -3,11 +3,11 @@
   import type { DotsScreen } from "../screen/web";
   import type { Sources } from "../../scene";
   import Inspector from "./Inspector.svelte";
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
-  export let screen: DotsScreen;
+  export let screen: DotsScreen | undefined = undefined;
   export let sources: Sources = [];
-  let inspectorMount: string | undefined;
+  let inspectorMount: string | undefined = undefined;
   export { inspectorMount as inspector };
 
   let inspector: HTMLDivElement;
@@ -18,6 +18,14 @@
     console.log(mount);
     if (mount) mount.appendChild(inspector);
   }
+
+  onMount(async () => {
+    await customElements.whenDefined("dots-screen");
+    const unsub = screen?.scale.subscribe((scale) => {
+      screen?.style.setProperty("--dots-screen-scale", scale.toString());
+      console.log("Scale", scale);
+    });
+  });
 
   onDestroy(() => {
     if (inspector) inspector.remove();

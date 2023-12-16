@@ -3,25 +3,25 @@
   import "./component";
   import type { DotsSource } from "./component";
   import { onMount } from "svelte";
-  import type { DotsEditor } from "$lib/overlay/components/editor/web";
+  import Editor from "$lib/overlay/editor/Editor.svelte";
+  import type { Sources } from "$lib/overlay/scene";
 
-  let editor: DotsEditor;
-
+  let sources: Sources = [];
   onMount(async () => {
-    if (!editor) return;
     const source = (await customElements.whenDefined("source-testing")) as typeof DotsSource;
     const { transform, options } = source.defaultProps;
 
-    editor.sources = [
+    sources = [
       {
         tag: "source-testing",
         transform,
         options,
       },
     ];
-    console.log(editor.sources);
+    console.log(sources);
   });
 </script>
 
 <h1>Editor Test</h1>
-<dots-editor bind:this={editor}></dots-editor>
+<!-- <dots-editor bind:this={editor}></dots-editor> -->
+<Editor bind:sources />

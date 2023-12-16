@@ -1,6 +1,6 @@
 import Source from "./Source.svelte";
 import { label, options, transform } from "./config";
-import type { WebComponent } from "$lib/overlay/components/types";
+import type { WebComponent } from "$lib/overlay/types";
 import type { Transform } from "$lib/overlay/scene";
 
 const Element = (Source as WebComponent<typeof Source, Transform>).element;
