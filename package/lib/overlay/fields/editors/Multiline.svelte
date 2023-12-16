@@ -3,22 +3,7 @@
   export let value: string;
 </script>
 
-<div class="editor">
-  <label class="title" for={label}>{label}</label>
-  <textarea name={label} bind:value />
+<div class="flex flex-col gap-1">
+  <label class="capitalize" for={label}>{label}</label>
+  <textarea class="dots-input" name={label} bind:value />
 </div>
-
-<style>
-  .editor {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .editor label {
-    text-transform: capitalize;
-  }
-
-  .editor textarea {
-    resize: vertical;
-  }
-</style>

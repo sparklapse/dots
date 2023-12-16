@@ -3,11 +3,7 @@
   export let value: string;
 </script>
 
-<label class="title" for={label}>{label}</label>
-<input type="text" name={label} bind:value />
-
-<style>
-  .title {
-    text-transform: capitalize;
-  }
-</style>
+<div class="flex justify-between">
+  <label class="capitalize" for={label}>{label}</label>
+  <input class="dots-input" type="text" name={label} bind:value />
+</div>

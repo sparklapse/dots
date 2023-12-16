@@ -8,10 +8,14 @@
       eager: true,
     },
   );
-  let selectedTest = "home";
+  let selectedTest = location.hash.slice(1) ?? "home";
+
+  $: if (selectedTest) {
+    location.hash = selectedTest;
+  }
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="stable-gutter flex h-screen flex-col gap-2 overflow-x-hidden">
   <h1>Dots</h1>
   <select name="tests" id="tests" bind:value={selectedTest}>
     <option value="home">Select a test</option>

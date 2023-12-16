@@ -18,24 +18,26 @@
   });
 </script>
 
-<div class="transform">
-  <h3>Transform</h3>
-  {#each transformKeys as param}
-    <div class="control">
-      <label for={param}>{param}</label>
-      <input type="number" name={param} bind:value={transform[param]} />
-    </div>
-  {/each}
-</div>
-<div class="options">
-  <h3>Options</h3>
-  {#each Object.keys(optionsTypes) as option}
-    <div class="control">
-      <svelte:component
-        this={optionsTypes[option].editor}
-        label={option}
-        bind:value={options[option]}
-      />
-    </div>
-  {/each}
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2">
+    <h3 class="text-xl font-bold">Transform</h3>
+    {#each transformKeys as param}
+      <div class="flex justify-between">
+        <label for={param}>{param}</label>
+        <input class="dots-input" type="number" name={param} bind:value={transform[param]} />
+      </div>
+    {/each}
+  </div>
+  <div class="flex flex-col gap-2">
+    <h3 class="text-xl font-bold">Options</h3>
+    {#each Object.keys(optionsTypes) as option}
+      <div class="control">
+        <svelte:component
+          this={optionsTypes[option].editor}
+          label={option}
+          bind:value={options[option]}
+        />
+      </div>
+    {/each}
+  </div>
 </div>

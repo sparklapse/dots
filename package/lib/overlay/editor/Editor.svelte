@@ -3,7 +3,7 @@
   import type { DotsScreen } from "../screen/web";
   import type { Sources } from "../scene";
   import Inspector from "./Inspector.svelte";
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy } from "svelte";
 
   export let screen: DotsScreen | undefined = undefined;
   export let sources: Sources = [];
@@ -41,7 +41,7 @@
 </dots-screen>
 
 {#if selected !== -1}
-  <div class="inspector-controls" bind:this={inspector}>
+  <div class="contents" bind:this={inspector}>
     <Inspector
       tag={sources[selected].tag}
       bind:transform={sources[selected].transform}
