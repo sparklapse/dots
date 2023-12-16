@@ -5,12 +5,31 @@ import type { Transform } from "$lib/overlay/scene";
 
 const Element = (Source as WebComponent<typeof Source, Transform>).element;
 
-const DotsSource = class extends Element {
+export const DotsSource = class extends Element {
   static get defaultProps() {
     return {
       transform,
-      options,
+      options: Object.entries(options).reduce(
+        (acc, [key, option]) => ({
+          ...acc,
+          [key]: option.value,
+        }),
+        {} as Record<string, any>,
+      ),
     };
+  }
+
+  static get optionsTypes() {
+    return options;
+  }
+
+  get options() {
+    const opts: Record<string, any> = {};
+    for (const key in options) {
+      // @ts-ignore
+      opts[key] = this[key];
+    }
+    return opts;
   }
 
   get transform() {

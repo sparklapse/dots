@@ -1,30 +1,21 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { Transform } from "../../scene";
+  import type { Field } from "../fields";
 
+  export let tag: string;
   export let options: { [key: string]: any };
   export let transform: Transform;
 
   const transformKeys = Object.keys(transform) as (keyof Transform)[];
 
-  const handleChange =
-    (option: string) =>
-    (
-      ev: Event & {
-        currentTarget: EventTarget & HTMLInputElement;
-      },
-    ) => {
-      switch (typeof options[option]) {
-        case "boolean":
-          options[option] = ev.currentTarget.checked;
-          break;
-        case "number":
-          options[option] = parseFloat(ev.currentTarget.value);
-          break;
-        default:
-          options[option] = ev.currentTarget.value;
-      }
-      options = { ...options };
+  let optionsTypes: { [key: string]: Field } = {};
+  onMount(async () => {
+    const component = (await customElements.whenDefined(tag)) as typeof HTMLElement & {
+      optionsTypes: { [key: string]: Field };
     };
+    optionsTypes = component.optionsTypes;
+  });
 </script>
 
 <div class="transform">
@@ -38,19 +29,12 @@
 </div>
 <div class="options">
   <h3>Options</h3>
-  {#each Object.keys(options) as option}
+  {#each Object.keys(optionsTypes) as option}
     <div class="control">
-      <label for={option}>{option}</label>
-      <input
-        type={typeof options[option] === "boolean"
-          ? "checkbox"
-          : typeof options[option] === "number"
-            ? "number"
-            : "text"}
-        name={option}
-        value={options[option]}
-        on:change={handleChange(option)}
-        on:input={handleChange(option)}
+      <svelte:component
+        this={optionsTypes[option].editor}
+        label={option}
+        bind:value={options[option]}
       />
     </div>
   {/each}

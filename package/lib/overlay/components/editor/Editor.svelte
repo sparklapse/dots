@@ -44,6 +44,7 @@
 {#if selected !== -1}
   <div class="inspector-controls" bind:this={inspector}>
     <Inspector
+      tag={sources[selected].tag}
       bind:transform={sources[selected].transform}
       bind:options={sources[selected].options}
     />

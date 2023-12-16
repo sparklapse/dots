@@ -1,6 +1,7 @@
 <script lang="ts">
   import "$lib/overlay";
   import "./component";
+  import type { DotsSource } from "./component";
   import { onMount } from "svelte";
   import type { DotsEditor } from "$lib/overlay/components/editor/web";
 
@@ -8,19 +9,17 @@
 
   onMount(async () => {
     if (!editor) return;
+    const source = (await customElements.whenDefined("source-testing")) as typeof DotsSource;
+    const { transform, options } = source.defaultProps;
 
     editor.sources = [
       {
         tag: "source-testing",
-        transform: {
-          x: 100,
-          y: 100,
-          width: 100,
-          height: 100,
-        },
-        options: {},
+        transform,
+        options,
       },
     ];
+    console.log(editor.sources);
   });
 </script>
 
