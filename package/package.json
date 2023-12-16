@@ -1,48 +1,59 @@
 {
   "name": "@sparklapse/dots",
-  "version": "0.1.0",
-  "type": "module",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "version": "0.2.0",
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0",
+    "build": "vite build && npm run package",
+    "preview": "vite preview",
+    "package": "svelte-kit sync && svelte-package && publint",
+    "prepublishOnly": "npm run package",
+    "test": "npm run test:integration && npm run test:unit",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "test:integration": "playwright test",
+    "test:unit": "vitest"
+  },
   "exports": {
-    "./overlay/screen": {
-      "default": "./dist/overlay/dots-screen.js",
-      "import": "./dist/overlay/dots-screen.js",
-      "require": "./dist/overlay/dots-screen.js"
-    },
-    
-    "./overlay/scene": {
-      "default": "./dist/dots-overlay-scene.js",
-      "import": "./dist/dots-overlay-scene.js",
-      "types": "./dist/overlay/scene/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
     }
   },
-  "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "rollup -c"
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*"
+  ],
+  "peerDependencies": {
+    "svelte": "^4.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@sveltejs/vite-plugin-svelte": "^3.0.1",
-    "@tsconfig/svelte": "^5.0.2",
-    "@types/node": "^20.10.4",
+    "@playwright/test": "^1.28.1",
+    "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/package": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.16",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^2.30.0",
     "postcss": "^8.4.32",
-    "prettier": "^3.1.0",
+    "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.1.2",
-    "prettier-plugin-tailwindcss": "^0.5.9",
-    "rollup-plugin-svelte": "^7.1.6",
-    "svelte-preprocess": "^5.1.1",
+    "publint": "^0.1.9",
+    "svelte": "^4.2.7",
+    "svelte-check": "^3.6.0",
     "tailwindcss": "^3.3.6",
-    "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.0"
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.3",
+    "vitest": "^0.32.2"
   },
-  "dependencies": {
-    "svelte": "^4.2.8"
-  }
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module"
 }
