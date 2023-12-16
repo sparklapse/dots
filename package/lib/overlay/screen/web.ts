@@ -11,4 +11,12 @@ export class DotsScreen extends Element {
   constructor() {
     super();
   }
+
+  async connectedCallback() {
+    await super.connectedCallback();
+
+    this.scale.subscribe((scale) => {
+      this.style.setProperty("--dots-screen-scale", scale.toString());
+    });
+  }
 }

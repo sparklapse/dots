@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Transform } from "../../scene";
+  import type { Transform } from "../scene";
   import type { Field } from "../fields";
 
   export let tag: string;

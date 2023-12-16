@@ -7,6 +7,7 @@
   import type { Sources } from "$lib/overlay/scene";
 
   let sources: Sources = [];
+  let dsPromise = customElements.whenDefined("dots-screen");
   onMount(async () => {
     const source = (await customElements.whenDefined("source-testing")) as typeof DotsSource;
     const { transform, options } = source.defaultProps;
@@ -18,10 +19,10 @@
         options,
       },
     ];
-    console.log(sources);
   });
 </script>
 
 <h1>Editor Test</h1>
-<!-- <dots-editor bind:this={editor}></dots-editor> -->
-<Editor bind:sources />
+{#await dsPromise then}
+  <Editor bind:sources />
+{/await}
