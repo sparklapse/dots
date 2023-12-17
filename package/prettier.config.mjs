@@ -10,6 +10,4 @@ export default {
   bracketSameLine: false,
   jsxSingleQuote: false,
   singleAttributePerLine: false,
-  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-  overrides: [{ files: "*.svelte", options: { parser: "svelte" } }],
 };

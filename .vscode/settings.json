@@ -9,6 +9,9 @@
   },
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "eslint.workingDirectories": ["package", "templates/source"],
+  "eslint.workingDirectories": [
+    "package",
+    "cli/create-dots-source/templates/*"
+  ],
   "editor.rulers": [100]
 }

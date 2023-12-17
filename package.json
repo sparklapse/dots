@@ -1,6 +1,0 @@
-{
-  "workspaces": [
-    "package",
-    "cli/create-dots-source"
-  ]
-}

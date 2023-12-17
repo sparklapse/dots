@@ -1,19 +1,9 @@
-import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [
-    svelte({
-      compilerOptions: {
-        customElement: true,
-      },
-    }),
-    {
-      // Since web components can't be redefined, full reload
-      name: "full-reload",
-      handleHotUpdate: ({ server }) => {
-        server.ws.send({ type: "full-reload" });
-      },
-    },
-  ],
+  plugins: [sveltekit()],
+  test: {
+    include: ["src/**/*.{test,spec}.{js,ts}"],
+  },
 });
