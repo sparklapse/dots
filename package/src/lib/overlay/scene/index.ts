@@ -1,5 +1,4 @@
-export type Transform = { x: number; y: number; width: number; height: number };
-export type Sources = { tag: string; transform: Transform; options: Record<string, unknown> }[];
+import type { Sources } from "./types.js";
 
 // TODO: Rename to build web scenes
 export const buildScene = (sources: Sources) => {

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { DotsSource } from "./component/index.js";
   import { onMount } from "svelte";
-  import Editor from "$lib/overlay/editor/Editor.svelte";
-  import type { Sources } from "$lib/overlay/scene/index.js";
+  import { Editor } from "$lib/overlay/index.js";
+  import type { Sources } from "$lib/overlay/index.js";
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
