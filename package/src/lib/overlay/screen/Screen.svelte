@@ -32,7 +32,7 @@
   });
 </script>
 
-<div class="w-full" bind:this={container}>
+<div class="w-full h-fit" bind:this={container}>
   <div class="contents">
     <div
       class="window"

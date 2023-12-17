@@ -24,6 +24,7 @@
 <style>
   .source {
     position: absolute;
+    font-size: 4rem;
   }
 
   .source pre {

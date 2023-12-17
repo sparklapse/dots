@@ -1,4 +1,4 @@
-import plugin from "tailwindcss/plugin";
+import plugin from "tailwindcss/plugin.js";
 
 /**
  * Colors Reference (https://coolors.co/ffe0f2-b5dfca-705d56):
@@ -12,6 +12,9 @@ export const dotsUI = plugin(
       // Utils
       ".stable-gutter": {
         scrollbarGutter: "stable both-edges",
+      },
+      ".scrollbar-thin": {
+        scrollbarWidth: "thin",
       },
       // Backgrounds
       ".dots-bg": {

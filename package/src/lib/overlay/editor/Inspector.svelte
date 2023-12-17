@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Transform } from "../scene";
-  import type { Field } from "../fields";
+  import type { Transform } from "../scene/index.js";
+  import type { Field } from "../fields/index.js";
 
   export let tag: string;
   export let options: { [key: string]: any };
@@ -39,5 +39,8 @@
         />
       </div>
     {/each}
+  </div>
+  <div class="mt-auto py-1">
+    <p class="italic">Inspecting {tag}</p>
   </div>
 </div>

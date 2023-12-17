@@ -1,3 +1,5 @@
-import { DotsScreen } from "./screen/web";
+import Screen from "./screen/Screen.svelte";
+import Editor from "./editor/Editor.svelte";
 
-customElements.define("dots-screen", DotsScreen);
+export { Screen, Editor };
+export type { WebComponent } from "./source/types.js";

@@ -1,5 +1,5 @@
 export type Transform = { x: number; y: number; width: number; height: number };
-export type Sources = { tag: string; transform: Transform; options: any }[];
+export type Sources = { tag: string; transform: Transform; options: Record<string, unknown> }[];
 
 // TODO: Rename to build web scenes
 export const buildScene = (sources: Sources) => {

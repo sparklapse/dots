@@ -7,16 +7,16 @@ type FieldOptions = {
 
 export type Field = {
   type: keyof FieldEditor | string;
-  value: any;
+  value: unknown;
   editor: FieldEditor;
 };
 
 export const field = (
   typeId: keyof FieldEditor | string,
-  defaultValue: any,
+  defaultValue: unknown,
   options?: FieldOptions,
 ): Field => {
-  let f: Partial<Field> = {
+  const f: Partial<Field> = {
     type: typeId,
     value: defaultValue,
     ...options,

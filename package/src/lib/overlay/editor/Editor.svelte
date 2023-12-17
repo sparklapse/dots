@@ -6,50 +6,46 @@
   import { onDestroy } from "svelte";
 
   export let sources: Sources = [];
-  let inspectorMount: string | undefined = undefined;
-  export { inspectorMount as inspector };
+  export let inspector: HTMLElement | undefined = undefined;
 
-  let inspector: HTMLDivElement;
+  let inspectorContents: HTMLDivElement;
   let selected = -1;
 
-  $: if (inspector && inspectorMount) {
-    const mount = document.getElementById(inspectorMount);
-    if (mount) mount.appendChild(inspector);
+  $: if (inspectorContents && inspector) {
+    if (inspector) inspector.appendChild(inspectorContents);
   }
 
   onDestroy(() => {
-    if (inspector) inspector.remove();
+    if (inspectorContents) inspectorContents.remove();
   });
 </script>
 
-<div>
-  <Screen>
-    <div class="bg" />
-    {#each sources as { tag, transform, options }}
-      <svelte:element this={tag} {...transform} {...options} />
-    {/each}
-    <div class="window" slot="window">
-      <div class="catch" on:pointerdown={() => (selected = -1)} />
-      {#each sources as _, i}
-        <Editable
-          selected={selected == i}
-          on:selected={() => (selected = i)}
-          bind:transform={sources[i].transform}
-        />
-      {/each}
-    </div>
-  </Screen>
-
-  {#if selected !== -1}
-    <div class="contents" bind:this={inspector}>
-      <Inspector
-        tag={sources[selected].tag}
-        bind:transform={sources[selected].transform}
-        bind:options={sources[selected].options}
+<Screen>
+  <div class="bg" />
+  {#each sources as { tag, transform, options }}
+    <svelte:element this={tag} {...transform} {...options} />
+  {/each}
+  <div class="window" slot="window">
+    <div class="catch" on:pointerdown={() => (selected = -1)} />
+    {#each sources as _, i}
+      <Editable
+        selected={selected == i}
+        on:selected={() => (selected = i)}
+        bind:transform={sources[i].transform}
       />
-    </div>
-  {/if}
-</div>
+    {/each}
+  </div>
+</Screen>
+
+{#if selected !== -1}
+  <div class="contents" bind:this={inspectorContents}>
+    <Inspector
+      tag={sources[selected].tag}
+      bind:transform={sources[selected].transform}
+      bind:options={sources[selected].options}
+    />
+  </div>
+{/if}
 
 <style>
   .bg {

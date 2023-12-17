@@ -1,6 +1,6 @@
 import Text from "./Text.svelte";
 import Multiline from "./Multiline.svelte";
-import type { FieldEditor } from "../types";
+import type { FieldEditor } from "../types.js";
 
 export const fieldEditors: Record<string, FieldEditor> = {
   text: Text,

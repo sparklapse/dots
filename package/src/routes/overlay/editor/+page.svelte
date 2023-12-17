@@ -4,6 +4,7 @@
   import Editor from "$lib/overlay/editor/Editor.svelte";
   import type { Sources } from "$lib/overlay/scene/index.js";
 
+  let inspector: HTMLDivElement;
   let sources: Sources = [];
   onMount(async () => {
     await import("./component/index.js");
@@ -21,4 +22,9 @@
 </script>
 
 <h1>Editor Test</h1>
-<Editor bind:sources />
+<div class="grid grid-cols-3 gap-2">
+  <div class="col-span-2">
+    <Editor bind:sources {inspector} />
+  </div>
+  <div bind:this={inspector} />
+</div>
