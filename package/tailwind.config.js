@@ -1,10 +1,10 @@
-import { dotsUI } from "./src/lib/ui";
+import { dotsUIPlugin } from "./src/lib/ui/tailwind";
 
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,svelte}"],
+  content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     extend: {},
   },
-  plugins: [dotsUI],
+  plugins: [dotsUIPlugin()],
 };
