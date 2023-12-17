@@ -1,4 +1,4 @@
-import { field } from "$lib/overlay/fields/index.js";
+import { field } from "$lib/overlay/field/index.js";
 import type { Transform } from "$lib/overlay/scene/index.js";
 
 export const label: string = "testing";
