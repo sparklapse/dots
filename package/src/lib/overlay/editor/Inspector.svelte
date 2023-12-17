@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Transform } from "../scene/index.js";
-  import type { Field } from "../fields/index.js";
+  import type { Field } from "../field/index.js";
 
   export let tag: string;
   export let options: { [key: string]: any };
