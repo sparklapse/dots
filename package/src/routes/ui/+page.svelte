@@ -86,7 +86,7 @@
       <div>
         <h2 class="text-2xl font-bold">Buttons</h2>
         <div class="flex flex-col gap-2">
-          <div class="flex gap-2">
+          <div class="flex items-baseline gap-2">
             <button class="dots-btn dots-btn-lg dots-btn-maceron">Large</button>
             <button class="dots-btn dots-btn-maceron">Medium (default)</button>
             <button class="dots-btn dots-btn-sm dots-btn-maceron">Small</button>
@@ -165,9 +165,10 @@
   </h1>
 
   <div class="mt-4 flex flex-col gap-2">
-    <div class="min-h-[14rem]">
-      <Dropdown>
-        <button class="dots-btn dots-btn-tea">Basic</button>
+    <div class="flex flex-col gap-1 min-h-[14rem]">
+      <h2 class="text-2xl font-bold">Dropdown</h2>
+      <Dropdown class="dots-btn dots-btn-tea w-24">
+        <span>Basic</span>
         <div slot="dropdown" class="mt-2 dots-card dots-card-tea">
           <p class="max-w-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus. Velit

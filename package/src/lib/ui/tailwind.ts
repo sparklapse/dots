@@ -6,9 +6,9 @@ import plugin from "tailwindcss/plugin.js";
  *   Secondary - #B5DFCA
  *   Greys - #705D56
  */
-export const dotsUIPlugin = () => {
-  return plugin(
-    ({ addComponents, theme }) => {
+export const dotsUIPlugin = plugin.withOptions(
+  (options = {}) => {
+    return ({ addComponents, theme }) => {
       addComponents({
         // Utils
         ".stable-gutter": {
@@ -25,7 +25,7 @@ export const dotsUIPlugin = () => {
         },
         // Buttons
         ".dots-btn": {
-          display: "flex",
+          display: "flex-inline",
           justifyContent: "center",
           alignItems: "center",
           height: "fit-content",
@@ -95,53 +95,54 @@ export const dotsUIPlugin = () => {
           background: `linear-gradient(45deg, white 0%, ${theme("colors.dots-tea.50")} 100%)`,
         },
       });
-    },
-    {
-      theme: {
-        extend: {
-          colors: {
-            "dots-maceron": {
-              50: "hsl(326, 70%, 95%)",
-              100: "hsl(325, 60%, 86%)",
-              200: "hsl(325, 50%, 77%)",
-              300: "hsl(325, 40%, 68%)",
-              400: "hsl(325, 40%, 59%)",
-              500: "hsl(325, 40%, 50%)",
-              600: "hsl(325, 40%, 41%)",
-              700: "hsl(325, 40%, 32%)",
-              800: "hsl(325, 40%, 23%)",
-              900: "hsl(326, 40%, 14%)",
-              950: "hsl(326, 40%, 5%)",
-            },
-            "dots-tea": {
-              50: "hsl(147, 39%, 95%)",
-              100: "hsl(150, 40%, 86%)",
-              200: "hsl(150, 40%, 77%)",
-              300: "hsl(150, 40%, 68%)",
-              400: "hsl(150, 40%, 59%)",
-              500: "hsl(150, 40%, 50%)",
-              600: "hsl(150, 40%, 41%)",
-              700: "hsl(150, 40%, 32%)",
-              800: "hsl(150, 40%, 23%)",
-              900: "hsl(150, 40%, 14%)",
-              950: "hsl(153, 39%, 5%)",
-            },
-            "dots-coffee": {
-              50: "hsl(20, 13%, 95%)",
-              100: "hsl(13, 13%, 86%)",
-              200: "hsl(19, 14%, 77%)",
-              300: "hsl(16, 14%, 68%)",
-              400: "hsl(16, 13%, 59%)",
-              500: "hsl(16, 13%, 50%)",
-              600: "hsl(16, 13%, 41%)",
-              700: "hsl(16, 14%, 32%)",
-              800: "hsl(15, 14%, 23%)",
-              900: "hsl(20, 13%, 14%)",
-              950: "hsl(20, 13%, 5%)",
-            },
+    };
+  },
+  (options = {}) => ({
+    content: ["./node_modules/@sparklapse/dots/**/*.{js,svelte}"],
+    theme: {
+      extend: {
+        colors: {
+          "dots-maceron": {
+            50: "hsl(326, 70%, 95%)",
+            100: "hsl(325, 60%, 86%)",
+            200: "hsl(325, 50%, 77%)",
+            300: "hsl(325, 40%, 68%)",
+            400: "hsl(325, 40%, 59%)",
+            500: "hsl(325, 40%, 50%)",
+            600: "hsl(325, 40%, 41%)",
+            700: "hsl(325, 40%, 32%)",
+            800: "hsl(325, 40%, 23%)",
+            900: "hsl(326, 40%, 14%)",
+            950: "hsl(326, 40%, 5%)",
+          },
+          "dots-tea": {
+            50: "hsl(147, 39%, 95%)",
+            100: "hsl(150, 40%, 86%)",
+            200: "hsl(150, 40%, 77%)",
+            300: "hsl(150, 40%, 68%)",
+            400: "hsl(150, 40%, 59%)",
+            500: "hsl(150, 40%, 50%)",
+            600: "hsl(150, 40%, 41%)",
+            700: "hsl(150, 40%, 32%)",
+            800: "hsl(150, 40%, 23%)",
+            900: "hsl(150, 40%, 14%)",
+            950: "hsl(153, 39%, 5%)",
+          },
+          "dots-coffee": {
+            50: "hsl(20, 13%, 95%)",
+            100: "hsl(13, 13%, 86%)",
+            200: "hsl(19, 14%, 77%)",
+            300: "hsl(16, 14%, 68%)",
+            400: "hsl(16, 13%, 59%)",
+            500: "hsl(16, 13%, 50%)",
+            600: "hsl(16, 13%, 41%)",
+            700: "hsl(16, 14%, 32%)",
+            800: "hsl(15, 14%, 23%)",
+            900: "hsl(20, 13%, 14%)",
+            950: "hsl(20, 13%, 5%)",
           },
         },
       },
     },
-  );
-};
+  }),
+);
