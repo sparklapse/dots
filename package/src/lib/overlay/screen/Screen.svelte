@@ -4,7 +4,7 @@
   export let width: number = 1920;
   export let height: number = 1080;
 
-  let scale = -1;
+  let scale = 0;
 
   let container: HTMLDivElement;
   let screen: HTMLDivElement;
@@ -35,12 +35,12 @@
 <div class="w-full h-fit" bind:this={container}>
   <div class="contents">
     <div
-      class="window"
+      class="relative isolate"
       style:width={`${Math.round(width * scale)}px`}
       style:height={`${Math.round(height * scale)}px`}
     >
       <div
-        class="screen"
+        class="absolute overflow-hidden z-0"
         style:transform-origin="top left"
         style:width={`${width}px`}
         style:height={`${height}px`}
@@ -48,50 +48,14 @@
         bind:this={screen}
       >
         <slot>
-          <div class="placeholder">
-            <span>SCREEN EMPTY</span>
+          <div class="grid w-full h-full place-content-center bg-black bg-opacity-70">
+            <span class="text-8xl font-bold text-white">SCREEN EMPTY</span>
           </div>
         </slot>
       </div>
-      <div class="window-overlay">
+      <div class="relative w-full h-full z-10 overflow-hidden">
         <slot name="window" />
       </div>
     </div>
   </div>
 </div>
-
-<style>
-  .window {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .screen {
-    position: absolute;
-    overflow: hidden;
-    z-index: 0;
-  }
-
-  .window-overlay {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    overflow: hidden;
-  }
-
-  .placeholder {
-    display: grid;
-    width: 100%;
-    height: 100%;
-    place-content: center;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-
-  .placeholder span {
-    font-family: sans-serif;
-    font-size: 6rem;
-    font-weight: 700;
-    color: white;
-  }
-</style>
