@@ -49,8 +49,8 @@
       case "move": {
         transform = {
           ...transform,
-          x: transform.x + ev.movementX / scale,
-          y: transform.y + ev.movementY / scale,
+          x: Math.round(transform.x + ev.movementX / scale),
+          y: Math.round(transform.y + ev.movementY / scale),
         };
         break;
       }
@@ -73,6 +73,11 @@
         } else {
           width += ev.movementX / scale;
         }
+
+        x = Math.round(x);
+        y = Math.round(y);
+        width = Math.round(width);
+        height = Math.round(height);
 
         transform = {
           ...transform,
