@@ -11,18 +11,10 @@
   /* $options$ */
 </script>
 
-<div
-  class="source"
-  style:left={`${x ?? 0}px`}
-  style:top={`${y ?? 0}px`}
-  style:width={`${width}px`}
-  style:height={`${height}px`}
->
-  <Component transform={{ x, y, width, height }} $use-options />
-</div>
+<Component transform={{ x, y, width, height }} $use-options />
 
 <style>
-  .source {
+  :global(:host) {
     position: absolute;
   }
 </style>

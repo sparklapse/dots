@@ -1,7 +1,7 @@
 <script lang="ts">
   import Editable from "./Editable.svelte";
   import Screen from "$lib/overlay/screen/Screen.svelte";
-  import type { Sources } from "../scene/index.js";
+  import type { Sources } from "../scene/types.js";
   import Inspector from "./Inspector.svelte";
   import { onDestroy } from "svelte";
 
@@ -23,7 +23,14 @@
 <Screen>
   <div class="bg" />
   {#each sources as { tag, transform, options }}
-    <svelte:element this={tag} {...transform} {...options} />
+    <svelte:element
+      this={tag}
+      style:width={`${transform.width}px`}
+      style:height={`${transform.height}px`}
+      style:left={`${transform.x}px`}
+      style:top={`${transform.y}px`}
+      {...options}
+    />
   {/each}
   <div class="window" slot="window">
     <div class="catch" on:pointerdown={() => (selected = -1)} />

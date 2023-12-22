@@ -20,9 +20,21 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
     },
+    "./ui": {
+      "types": "./dist/ui/index.d.ts",
+      "import": "./dist/ui/index.js",
+      "node": "./dist/ui/index.js"
+    },
+    "./ui/tailwind": {
+      "types": "./dist/ui/tailwind.d.ts",
+      "import": "./dist/ui/tailwind.js",
+      "node": "./dist/ui/tailwind.js"
+    },
     "./overlay": {
       "types": "./dist/overlay/index.d.ts",
-      "svelte": "./dist/overlay/index.js"
+      "svelte": "./dist/overlay/index.js",
+      "import": "./dist/overlay/index.js",
+      "node": "./dist/overlay/index.js"
     }
   },
   "files": [
