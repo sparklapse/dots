@@ -2,18 +2,14 @@ import type { ComponentType } from "svelte";
 import type { Field } from "../field/index.js";
 import type { Transform } from "../scene/types.js";
 
-// type WebComponent<
-//   P extends Record<string, unknown>,
-//   C extends ComponentType = ComponentType,
-// > = C & {
-//   element: HTMLElement &
-//     CustomElementConstructor & {
-//       new (): P & {
-//         connectedCallback(): void | Promise<void>;
-//         disconnectedCallback(): void | Promise<void>;
-//       };
-//     };
-// };
+export type DotsSource = typeof HTMLElement & {
+  defaultProps: {
+    transform: Transform;
+    options: Record<string, unknown>;
+  };
+  optionsTypes: Record<string, Field>;
+  options: Record<string, unknown>;
+};
 
 export const createSource = (
   source: ComponentType,

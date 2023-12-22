@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { field } from "$lib/overlay/index.js";
 
-  export const label = "testing";
+  export const label = "text";
   export const transform = {
     x: 100,
     y: 100,

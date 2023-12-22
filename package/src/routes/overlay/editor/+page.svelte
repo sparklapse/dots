@@ -1,21 +1,23 @@
 <script lang="ts">
-  import type { DotsSource } from "./component/index.js";
   import { onMount } from "svelte";
   import { Editor } from "$lib/overlay/index.js";
-  import type { Sources } from "$lib/overlay/index.js";
+  import type { Sources, DotsSource } from "$lib/overlay/index.js";
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
   onMount(async () => {
     await import("./component/index.js");
-    const source = (await customElements.whenDefined("source-testing")) as typeof DotsSource;
-    const { transform, options } = source.defaultProps;
+    const textSource = (await customElements.whenDefined("source-text")) as DotsSource;
+    const imageSource = (await customElements.whenDefined("source-image")) as DotsSource;
 
     sources = [
       {
-        tag: "source-testing",
-        transform,
-        options,
+        tag: "source-text",
+        ...textSource.defaultProps,
+      },
+      {
+        tag: "source-image",
+        ...imageSource.defaultProps,
       },
     ];
   });
