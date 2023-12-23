@@ -3,7 +3,7 @@
 
   export const label = "image";
   export const transform = {
-    x: 100,
+    x: 400,
     y: 100,
     width: 200,
     height: 200,
