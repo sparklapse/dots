@@ -1,4 +1,5 @@
 <script lang="ts">
+  import clsx from "clsx";
   import type { ComponentType } from "svelte";
   import { flip } from "svelte/animate";
 
@@ -74,12 +75,17 @@
 </script>
 
 <ul
-  class="flex flex-col bg-white p-2 rounded isolate list"
-  style:flex-direction={reverse ? "column-reverse" : "column"}
+  class={clsx([
+    "flex flex-col bg-white p-2 rounded isolate list",
+    reverse ? "flex-col-reverse" : "flex-col",
+  ])}
 >
   {#each options as opt, i (opt.id)}
     <li
-      class="hover:bg-dots-coffee-50 box-border flex items-center first:rounded-t last:rounded-b p-2"
+      class={clsx([
+        "hover:bg-dots-coffee-50 box-border flex items-center p-2",
+        reverse ? "last:rounded-t first:rounded-b" : "first:rounded-t last:rounded-b",
+      ])}
       draggable="true"
       data-index={i}
       on:dragstart={dragStart}
