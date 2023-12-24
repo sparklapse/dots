@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Dropdown } from "$lib/ui/index.js";
+  import { Dropdown, OrderableList } from "$lib/ui/index.js";
 </script>
 
 <div class="dots-bg h-auto w-full overflow-x-hidden p-4">
@@ -165,6 +165,25 @@
   </h1>
 
   <div class="mt-4 flex flex-col gap-2">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-2xl font-bold">Re-orderable List</h2>
+      <OrderableList
+        options={[
+          {
+            id: "abc123",
+            label: "Item 1",
+          },
+          {
+            id: "def456",
+            label: "Item 2",
+          },
+          {
+            id: "ghi789",
+            label: "Item 3",
+          },
+        ]}
+      />
+    </div>
     <div class="flex flex-col gap-1 min-h-[14rem]">
       <h2 class="text-2xl font-bold">Dropdown</h2>
       <Dropdown class="dots-btn dots-btn-tea w-24">

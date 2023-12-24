@@ -1,14 +1,14 @@
 import type { ComponentType } from "svelte";
-import type { Field } from "../field/index.js";
+import type { Field, FieldValues } from "../field/index.js";
 import type { Transform } from "../scene/types.js";
 
 export type DotsSource = typeof HTMLElement & {
   defaultProps: {
     transform: Transform;
-    options: Record<string, unknown>;
+    options: Record<string, FieldValues>;
   };
   optionsTypes: Record<string, Field>;
-  options: Record<string, unknown>;
+  options: Record<string, FieldValues>;
 };
 
 export const createSource = (

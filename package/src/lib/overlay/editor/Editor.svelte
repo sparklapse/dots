@@ -46,11 +46,7 @@
 
 {#if selected !== -1}
   <div class="contents" bind:this={inspectorContents}>
-    <Inspector
-      tag={sources[selected].tag}
-      bind:transform={sources[selected].transform}
-      bind:options={sources[selected].options}
-    />
+    <Inspector bind:source={sources[selected]} />
   </div>
 {/if}
 

@@ -1,8 +1,12 @@
 import Text from "./Text.svelte";
 import Multiline from "./Multiline.svelte";
-import type { FieldEditor } from "../types.js";
+import Checkbox from "./Checkbox.svelte";
+import type { SvelteComponent } from "svelte";
 
-export const fieldEditors: Record<string, FieldEditor> = {
+export type FieldEditor = typeof SvelteComponent<{ label: string; value: unknown }>;
+
+export const fieldEditors = {
   text: Text,
   multiline: Multiline,
-};
+  checkbox: Checkbox,
+} satisfies Record<string, FieldEditor>;
