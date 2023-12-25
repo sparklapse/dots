@@ -1,15 +1,15 @@
 <script lang="ts">
-  import Editable from "./Editable.svelte";
+  import { onDestroy } from "svelte";
   import Screen from "$lib/overlay/screen/Screen.svelte";
   import type { Sources } from "../scene/types.js";
   import Inspector from "./Inspector.svelte";
-  import { onDestroy } from "svelte";
+  import Editable from "./Editable.svelte";
 
   export let sources: Sources = [];
   export let inspector: HTMLElement | undefined = undefined;
+  export let selected: number = -1;
 
   let inspectorContents: HTMLDivElement;
-  let selected = -1;
 
   $: if (inspectorContents && inspector) {
     if (inspector) inspector.appendChild(inspectorContents);
