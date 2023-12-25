@@ -168,7 +168,7 @@
     <div class="flex flex-col gap-1">
       <h2 class="text-2xl font-bold">Re-orderable List</h2>
       <OrderableList
-        options={[
+        items={[
           {
             id: "abc123",
             label: "Item 1",

@@ -1,14 +1,17 @@
 <script lang="ts">
   import clsx from "clsx";
-  import type { ComponentType } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { flip } from "svelte/animate";
 
-  export let itemElement: ComponentType | undefined = undefined;
+  type I = $$Generic<{ id: string; label: string }>;
+
   export let reverse: boolean = false;
-  export let options: { id: string; label: string }[] = [];
+  export let items: I[] = [];
 
   let draggedIndex: number | undefined = undefined;
   let overIndex: number | undefined = undefined;
+
+  const dispatch = createEventDispatcher<{ reordered: { prev: number; new: number } }>();
 
   const dragStart = (
     ev: DragEvent & {
@@ -45,7 +48,7 @@
     }
 
     if (reverse) side *= -1;
-    if (side < 0 && overIndex + 1 !== options.length && draggedIndex > overIndex) overIndex += 1;
+    if (side < 0 && overIndex + 1 !== items.length && draggedIndex > overIndex) overIndex += 1;
     if (side > 0 && overIndex !== 0 && draggedIndex < overIndex) overIndex -= 1;
   };
 
@@ -67,8 +70,10 @@
     ev.preventDefault();
     dragUnstyle(ev);
 
-    options.splice(overIndex, 0, ...options.splice(draggedIndex, 1));
-    options = [...options];
+    items.splice(overIndex, 0, ...items.splice(draggedIndex, 1));
+    items = [...items];
+
+    dispatch("reordered", { prev: draggedIndex, new: overIndex });
 
     draggedIndex = undefined;
   };
@@ -76,14 +81,14 @@
 
 <ul
   class={clsx([
-    "flex flex-col bg-white p-2 rounded isolate list",
+    "flex flex-col bg-white rounded isolate list",
     reverse ? "flex-col-reverse" : "flex-col",
   ])}
 >
-  {#each options as opt, i (opt.id)}
+  {#each items as opt, i (opt.id)}
     <li
       class={clsx([
-        "hover:bg-dots-coffee-50 box-border flex items-center p-2",
+        "hover:bg-dots-coffee-50 box-border flex items-center overflow-hidden",
         reverse ? "last:rounded-t first:rounded-b" : "first:rounded-t last:rounded-b",
       ])}
       draggable="true"
@@ -94,11 +99,7 @@
       on:drop={drop}
       animate:flip={{ duration: 200 }}
     >
-      {#if itemElement}
-        <svelte:component this={itemElement} {...opt} />
-      {:else}
-        <span class="select-none">{opt.label}</span>
-      {/if}
+      <slot item={{ index: i, ...opt }} />
     </li>
   {/each}
 </ul>
