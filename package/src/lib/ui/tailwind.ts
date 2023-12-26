@@ -67,7 +67,7 @@ export const dotsUIPlugin = plugin.withOptions(
           borderRadius: "0.25rem",
           border: `1px solid ${theme("colors.dots-coffee.100")}`,
           boxShadow: `0 0 0.15rem rgba(255, 255, 255, 0.25), inset 0 0 0.25rem rgba(0, 0, 0, 0.05)`,
-          "&:not([type=checkbox]):not([type=radio])": {
+          "&:not([type=checkbox]):not([type=radio]):not(textarea)": {
             backgroundColor: "white",
             width: "10rem",
           },
