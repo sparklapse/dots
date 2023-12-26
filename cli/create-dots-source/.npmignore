@@ -13,3 +13,5 @@ dist-ssr
 
 bun.lockb
 package-lock.json
+
+prettier.config.mjs
