@@ -189,16 +189,35 @@
     </div>
     <div class="flex flex-col gap-1">
       <h2 class="text-2xl font-bold">Dropdown</h2>
-      <Dropdown class="dots-btn dots-btn-tea w-52">
-        <span>Basic</span>
-        <div slot="dropdown" class="my-2 dots-card dots-card-tea">
-          <p class="max-w-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus. Velit
-            rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio reiciendis
-            molestias provident nam! Quaerat distinctio dicta provident.
-          </p>
-        </div>
-      </Dropdown>
+      <div class="flex gap-2">
+        <Dropdown class="dots-btn dots-btn-tea w-52">
+          <span>Basic</span>
+          <div slot="dropdown" class="my-2 dots-card dots-card-tea">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus.
+              Velit rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio
+              reiciendis molestias provident nam! Quaerat distinctio dicta provident.
+            </p>
+          </div>
+        </Dropdown>
+        <Dropdown class="dots-btn dots-btn-tea w-52">
+          <span>Max Height</span>
+          <div
+            slot="dropdown"
+            class="flex flex-col my-2 dots-card dots-card-tea h-full overflow-y-auto"
+          >
+            <div class="h-full max-h-[20rem] overflow-y-auto scrollbar-thin">
+              {#each Array.apply(null, Array(5)).map(function () {}) as _}
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus.
+                  Velit rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio
+                  reiciendis molestias provident nam! Quaerat distinctio dicta provident.
+                </p>
+              {/each}
+            </div>
+          </div>
+        </Dropdown>
+      </div>
     </div>
   </div>
 </div>

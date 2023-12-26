@@ -13,18 +13,20 @@
   <Dropdown class="dots-input">
     <span>{items[selected].label}</span>
     <div class="bg-white shadow w-full" slot="dropdown">
-      {#each items as item, i}
-        <button
-          class="w-full text-left p-2 hover:bg-zinc-100"
-          class:selected={i === selected}
-          on:click={() => {
-            selected = i;
-            value = item.value;
-          }}
-        >
-          {item.label}
-        </button>
-      {/each}
+      <div class="h-full max-h-[20rem] overflow-y-auto scrollbar-thin">
+        {#each items as item, i}
+          <button
+            class="w-full text-left p-2 hover:bg-zinc-100"
+            class:selected={i === selected}
+            on:click={() => {
+              selected = i;
+              value = item.value;
+            }}
+          >
+            {item.label}
+          </button>
+        {/each}
+      </div>
     </div>
   </Dropdown>
 </div>
