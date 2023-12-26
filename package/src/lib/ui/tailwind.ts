@@ -63,11 +63,14 @@ export const dotsUIPlugin = plugin.withOptions(
         },
         //Inputs
         ".dots-input": {
-          width: "10rem",
           padding: "0 0.5rem",
           borderRadius: "0.25rem",
           border: `1px solid ${theme("colors.dots-coffee.100")}`,
           boxShadow: `0 0 0.15rem rgba(255, 255, 255, 0.25), inset 0 0 0.25rem rgba(0, 0, 0, 0.05)`,
+          "&:not([type=checkbox]):not([type=radio])": {
+            backgroundColor: "white",
+            width: "10rem",
+          },
           "&[type=number]": {
             appearance: "textfield",
             textAlign: "right",
