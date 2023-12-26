@@ -1,45 +1,20 @@
-import Source from "./Source.svelte";
-import { label, options, transform } from "./config.js";
-import type { WebComponent } from "$lib/overlay/index.js";
-import type { Transform } from "$lib/overlay/index.js";
+import TextSource, {
+  label as tsLabel,
+  transform as tsTransform,
+  options as tsOptions,
+} from "./TextSource.svelte";
+import ImageSource, {
+  label as isLabel,
+  transform as isTransform,
+  options as isOptions,
+} from "./ImageSource.svelte";
+import { createSource } from "$lib/overlay/source/index.js";
 
-const Element = (Source as WebComponent<typeof Source, Transform>).element;
+export const textSource = createSource(TextSource, { transform: tsTransform, options: tsOptions });
+export const imageSource = createSource(ImageSource, {
+  transform: isTransform,
+  options: isOptions,
+});
 
-export const DotsSource = class extends Element {
-  static get defaultProps() {
-    return {
-      transform,
-      options: Object.entries(options).reduce(
-        (acc, [key, option]) => ({
-          ...acc,
-          [key]: option.value,
-        }),
-        {} as Record<string, unknown>,
-      ),
-    };
-  }
-
-  static get optionsTypes() {
-    return options;
-  }
-
-  get options() {
-    const opts: Record<string, unknown> = {};
-    for (const key in options) {
-      // @ts-expect-error - Get option values from the component
-      opts[key] = this[key];
-    }
-    return opts;
-  }
-
-  get transform() {
-    return {
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height,
-    };
-  }
-};
-
-customElements.define("source-" + label, DotsSource);
+customElements.define("source-" + tsLabel, textSource);
+customElements.define("source-" + isLabel, imageSource);

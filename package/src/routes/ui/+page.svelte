@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Dropdown } from "$lib/ui/index.js";
+  import { Dropdown, OrderableList } from "$lib/ui/index.js";
 </script>
 
 <div class="dots-bg h-auto w-full overflow-x-hidden p-4">
@@ -165,18 +165,59 @@
   </h1>
 
   <div class="mt-4 flex flex-col gap-2">
-    <div class="flex flex-col gap-1 min-h-[14rem]">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-2xl font-bold">Re-orderable List</h2>
+      <OrderableList
+        items={[
+          {
+            id: "abc123",
+            label: "Item 1",
+          },
+          {
+            id: "def456",
+            label: "Item 2",
+          },
+          {
+            id: "ghi789",
+            label: "Item 3",
+          },
+        ]}
+        let:item
+      >
+        <div class="w-full select-none p-2">{item.label}</div>
+      </OrderableList>
+    </div>
+    <div class="flex flex-col gap-1">
       <h2 class="text-2xl font-bold">Dropdown</h2>
-      <Dropdown class="dots-btn dots-btn-tea w-24">
-        <span>Basic</span>
-        <div slot="dropdown" class="mt-2 dots-card dots-card-tea">
-          <p class="max-w-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus. Velit
-            rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio reiciendis
-            molestias provident nam! Quaerat distinctio dicta provident.
-          </p>
-        </div>
-      </Dropdown>
+      <div class="flex gap-2">
+        <Dropdown class="dots-btn dots-btn-tea w-52">
+          <span>Basic</span>
+          <div slot="dropdown" class="my-2 dots-card dots-card-tea">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus.
+              Velit rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio
+              reiciendis molestias provident nam! Quaerat distinctio dicta provident.
+            </p>
+          </div>
+        </Dropdown>
+        <Dropdown class="dots-btn dots-btn-tea w-52">
+          <span>Max Height</span>
+          <div
+            slot="dropdown"
+            class="flex flex-col my-2 dots-card dots-card-tea h-full overflow-y-auto"
+          >
+            <div class="h-full max-h-[20rem] overflow-y-auto scrollbar-thin">
+              {#each Array.apply(null, Array(5)).map(function () {}) as _}
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus.
+                  Velit rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio
+                  reiciendis molestias provident nam! Quaerat distinctio dicta provident.
+                </p>
+              {/each}
+            </div>
+          </div>
+        </Dropdown>
+      </div>
     </div>
   </div>
 </div>

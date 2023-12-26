@@ -76,8 +76,8 @@
 
         x = Math.round(x);
         y = Math.round(y);
-        width = Math.round(width);
-        height = Math.round(height);
+        width = Math.max(0, Math.round(width));
+        height = Math.max(0, Math.round(height));
 
         transform = {
           ...transform,
