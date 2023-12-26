@@ -1,4 +1,4 @@
-# Dots: Overlay Source template (js)
+# Dots: Overlay Source template (ts)
 
 This is a template for creating a dots overlay source.
 
