@@ -74,7 +74,7 @@
 {#if open}
   <form
     class={clsx([
-      "absolute z-10",
+      "absolute z-10 w-full",
       (y === "auto" ? autoY : y) === "above" ? "bottom-full" : "top-full",
       x === "left" ? "left-0" : "right-0",
     ])}

@@ -10,7 +10,12 @@
   };
 
   export const options = {
-    src: field("text", "https://thispersondoesnotexist.com/"),
+    src: field("select", "https://thispersondoesnotexist.com/", {
+      items: [
+        { label: "Face", value: "https://thispersondoesnotexist.com/" },
+        { label: "Duck", value: "https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_9a759911d295485895b30ac011237c0d/default/dark/3.0" },
+      ],
+    }),
   };
 </script>
 

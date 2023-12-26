@@ -63,6 +63,7 @@ export const dotsUIPlugin = plugin.withOptions(
         },
         //Inputs
         ".dots-input": {
+          width: "10rem",
           padding: "0 0.5rem",
           borderRadius: "0.25rem",
           border: `1px solid ${theme("colors.dots-coffee.100")}`,

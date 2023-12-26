@@ -41,6 +41,7 @@
           this={optionsTypes[option].editor}
           label={option}
           bind:value={source.options[option]}
+          {...optionsTypes[option].props}
         />
       </div>
     {/each}
