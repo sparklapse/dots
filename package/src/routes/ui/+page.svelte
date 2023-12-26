@@ -182,13 +182,16 @@
             label: "Item 3",
           },
         ]}
-      />
+        let:item
+      >
+        <div class="w-full select-none p-2">{item.label}</div>
+      </OrderableList>
     </div>
-    <div class="flex flex-col gap-1 min-h-[14rem]">
+    <div class="flex flex-col gap-1">
       <h2 class="text-2xl font-bold">Dropdown</h2>
-      <Dropdown class="dots-btn dots-btn-tea w-24">
+      <Dropdown class="dots-btn dots-btn-tea w-52">
         <span>Basic</span>
-        <div slot="dropdown" class="mt-2 dots-card dots-card-tea">
+        <div slot="dropdown" class="my-2 dots-card dots-card-tea">
           <p class="max-w-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, fugit voluptatibus. Velit
             rerum earum at qui harum, aut, consequuntur recusandae, sed distinctio reiciendis
