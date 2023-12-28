@@ -70,10 +70,19 @@
     ev.preventDefault();
     dragUnstyle(ev);
 
+    const cancelled = !dispatch(
+      "reordered",
+      { prev: draggedIndex, new: overIndex },
+      { cancelable: true },
+    );
+
+    if (cancelled) {
+      draggedIndex = undefined;
+      return;
+    }
+
     items.splice(overIndex, 0, ...items.splice(draggedIndex, 1));
     items = [...items];
-
-    dispatch("reordered", { prev: draggedIndex, new: overIndex });
 
     draggedIndex = undefined;
   };
