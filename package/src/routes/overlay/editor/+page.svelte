@@ -15,12 +15,18 @@
         id: "abc123",
         label: "text 1",
         tag: "source-text",
+        editor: {
+          locked: false,
+        },
         ...textSource.defaultProps,
       },
       {
         id: "def456",
         label: "image 1",
         tag: "source-image",
+        editor: {
+          locked: false,
+        },
         ...imageSource.defaultProps,
       },
     ];

@@ -34,12 +34,14 @@
   {/each}
   <div class="window" slot="window">
     <div class="catch" on:pointerdown={() => (selected = -1)} />
-    {#each sources as _, i}
-      <Editable
-        selected={selected == i}
-        on:selected={() => (selected = i)}
-        bind:transform={sources[i].transform}
-      />
+    {#each sources as s, i}
+      {#if !s.editor.locked}
+        <Editable
+          selected={selected == i}
+          on:selected={() => (selected = i)}
+          bind:transform={sources[i].transform}
+        />
+      {/if}
     {/each}
   </div>
 </Screen>
