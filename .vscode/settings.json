@@ -10,8 +10,7 @@
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "eslint.workingDirectories": [
-    "package",
-    "cli/create-dots-source/templates/*"
+    "package"
   ],
   "editor.rulers": [100]
 }

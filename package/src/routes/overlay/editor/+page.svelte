@@ -7,7 +7,7 @@
   let sources: Sources = [];
   onMount(async () => {
     await import("./component/index.js");
-    await import("./built/source-0.3.0.js");
+    await import("./built/source-0.3.0.js" + "");
     const textSource = (await customElements.whenDefined("source-text")) as DotsSource;
     const imageSource = (await customElements.whenDefined("source-image")) as DotsSource;
     const mySource = (await customElements.whenDefined("source-my-source")) as DotsSource;
