@@ -4,7 +4,7 @@
   export const label = "text";
   export const transform = {
     x: 100,
-    y: 100,
+    y: 500,
     width: 200,
     height: 200,
   };
