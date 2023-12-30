@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import Screen from "$lib/overlay/screen/Screen.svelte";
-  import type { Sources } from "../scene/types.js";
+  import Screen from "../screen/Screen.svelte";
   import Inspector from "./Inspector.svelte";
   import Editable from "./Editable.svelte";
+  import type { Sources } from "../scene/types.js";
 
   export let sources: Sources = [];
   export let inspector: HTMLElement | undefined = undefined;
@@ -48,7 +48,9 @@
 
 {#if selected !== -1}
   <div class="contents" bind:this={inspectorContents}>
-    <Inspector bind:source={sources[selected]} />
+    {#key selected}
+      <Inspector bind:source={sources[selected]} />
+    {/key}
   </div>
 {/if}
 
