@@ -64,7 +64,7 @@ export const createSource = (
       };
     }
 
-    static get optionsTypes() {
+    static get optionTypes() {
       return options;
     }
 

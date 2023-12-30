@@ -1,18 +1,24 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { fieldEditors } from "../field/editors/index.js";
+  import Fallback from "../field/editors/Fallback.svelte";
+  import type { SvelteComponent } from "svelte";
   import type { Source, Transform } from "../scene/types.js";
   import type { Field } from "../field/index.js";
 
   export let source: Source;
 
+  // This fixes a weird typescript issue when using with svelte:component
+  const fe = fieldEditors as { [key: string]: typeof SvelteComponent };
+
   const transformKeys = Object.keys(source.transform) as (keyof Transform)[];
 
-  let optionsTypes: { [key: string]: Field } = {};
+  let optionTypes: { [key: string]: Field } = {};
   onMount(async () => {
     const component = (await customElements.whenDefined(source.tag)) as typeof HTMLElement & {
-      optionsTypes: { [key: string]: Field };
+      optionTypes: { [key: string]: Field };
     };
-    optionsTypes = component.optionsTypes;
+    optionTypes = component.optionTypes;
   });
 </script>
 
@@ -35,13 +41,13 @@
   </div>
   <div class="flex flex-col gap-2">
     <h3 class="text-xl font-bold">Options</h3>
-    {#each Object.keys(optionsTypes) as option}
+    {#each Object.keys(optionTypes) as option}
       <div class="control">
         <svelte:component
-          this={optionsTypes[option].editor}
+          this={fe[optionTypes[option].type] ?? Fallback}
           label={option}
           bind:value={source.options[option]}
-          {...optionsTypes[option].props}
+          {...optionTypes[option].props}
         />
       </div>
     {/each}
