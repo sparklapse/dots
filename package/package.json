@@ -1,6 +1,6 @@
 {
   "name": "@sparklapse/dots",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build && npm run package",
