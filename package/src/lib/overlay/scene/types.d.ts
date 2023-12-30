@@ -3,6 +3,9 @@ export type Source = {
   id: string;
   label: string;
   tag: string;
+  editor: {
+    locked: boolean;
+  };
   transform: Transform;
   options: Record<string, unknown>;
 };

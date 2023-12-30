@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import Screen from "$lib/overlay/screen/Screen.svelte";
-  import type { Sources } from "../scene/types.js";
+  import Screen from "../screen/Screen.svelte";
   import Inspector from "./Inspector.svelte";
   import Editable from "./Editable.svelte";
+  import type { Sources } from "../scene/types.js";
 
   export let sources: Sources = [];
   export let inspector: HTMLElement | undefined = undefined;
@@ -34,19 +34,23 @@
   {/each}
   <div class="window" slot="window">
     <div class="catch" on:pointerdown={() => (selected = -1)} />
-    {#each sources as _, i}
-      <Editable
-        selected={selected == i}
-        on:selected={() => (selected = i)}
-        bind:transform={sources[i].transform}
-      />
+    {#each sources as s, i}
+      {#if !s.editor.locked}
+        <Editable
+          selected={selected == i}
+          on:selected={() => (selected = i)}
+          bind:transform={sources[i].transform}
+        />
+      {/if}
     {/each}
   </div>
 </Screen>
 
 {#if selected !== -1}
   <div class="contents" bind:this={inspectorContents}>
-    <Inspector bind:source={sources[selected]} />
+    {#key selected}
+      <Inspector bind:source={sources[selected]} />
+    {/key}
   </div>
 {/if}
 
