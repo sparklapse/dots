@@ -20,6 +20,18 @@
     };
     optionTypes = component.optionTypes;
   });
+
+  const clickAction = (option: string) => {
+    return () => {
+      const elem = document.getElementById(source.id) as HTMLElement & {
+        [key: string]: ((source: Source) => void) | undefined;
+      };
+
+      const action = elem[option];
+      if (typeof action !== "function") return;
+      if (action) action.call(elem, source);
+    };
+  };
 </script>
 
 <div class="flex flex-col gap-4">
@@ -42,14 +54,26 @@
   <div class="flex flex-col gap-2">
     <h3 class="text-xl font-bold">Options</h3>
     {#each Object.keys(optionTypes) as option}
-      <div class="control">
-        <svelte:component
-          this={fe[optionTypes[option].type] ?? Fallback}
-          label={option}
-          bind:value={source.options[option]}
-          {...optionTypes[option].props}
-        />
-      </div>
+      {#if optionTypes[option].type === "action" || optionTypes[option].type === "helper"}
+        <div class="control">
+          <svelte:component
+            this={fe[optionTypes[option].type] ?? Fallback}
+            label={option}
+            bind:value={optionTypes[option].value}
+            on:click={clickAction(option)}
+          />
+        </div>
+      {:else}
+        <div class="control">
+          <svelte:component
+            this={fe[optionTypes[option].type] ?? Fallback}
+            label={option}
+            bind:value={source.options[option]}
+            {...optionTypes[option].props}
+          />
+        </div>
+      {/if}
+      <hr />
     {/each}
   </div>
   <div class="mt-auto py-1">

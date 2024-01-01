@@ -22,9 +22,10 @@
 
 <Screen>
   <div class="bg" />
-  {#each sources as { tag, transform, options }}
+  {#each sources as { id, tag, transform, options }}
     <svelte:element
       this={tag}
+      {id}
       style:width={`${transform.width}px`}
       style:height={`${transform.height}px`}
       style:left={`${transform.x}px`}

@@ -7,7 +7,7 @@ export type DotsSource = typeof HTMLElement & {
     transform: Transform;
     options: Record<string, FieldValues>;
   };
-  optionsTypes: Record<string, Field>;
+  optionTypes: Record<string, Field>;
   options: Record<string, FieldValues>;
 };
 
@@ -15,7 +15,16 @@ export const createSource = (
   source: ComponentType,
   { transform, options }: { transform: Transform; options: Record<string, Field> },
 ) => {
-  const SourceElement = source.element!;
+  const SourceElement = source.element as {
+    new (): HTMLElement & {
+      connectedCallback(): void | Promise<void>;
+      disconnectedCallback(): void | Promise<void>;
+    };
+    prototype: HTMLElement & {
+      connectedCallback(): void | Promise<void>;
+      disconnectedCallback(): void | Promise<void>;
+    };
+  };
 
   return class extends SourceElement {
     [key: keyof typeof options]: unknown;
@@ -32,6 +41,7 @@ export const createSource = (
       );
 
       const propName = propMap[name];
+      if (!propName) return;
 
       switch (options[propName].type) {
         case "number": {
@@ -55,10 +65,15 @@ export const createSource = (
       return {
         transform,
         options: Object.entries(options).reduce(
-          (acc, [key, option]) => ({
-            ...acc,
-            [key]: option.value,
-          }),
+          (acc, [key, option]) => {
+            if (option.type === "action") return acc;
+            if (option.type === "helper") return acc;
+
+            return {
+              ...acc,
+              [key]: option.value,
+            };
+          },
           {} as Record<string, unknown>,
         ),
       };
@@ -71,9 +86,21 @@ export const createSource = (
     get options() {
       const opts: Record<string, unknown> = {};
       for (const key in options) {
+        if (options[key].type === "action") continue;
+
         opts[key] = this[key];
       }
       return opts;
+    }
+
+    get actions() {
+      const acts: Record<string, unknown> = {};
+      for (const key in options) {
+        if (options[key].type !== "action") continue;
+
+        acts[key] = this[key];
+      }
+      return acts;
     }
   };
 };

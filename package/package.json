@@ -74,6 +74,7 @@
   "type": "module",
   "dependencies": {
     "clsx": "^2.0.0",
+    "nanoid": "^5.0.4",
     "obs-websocket-js": "latest"
   }
 }

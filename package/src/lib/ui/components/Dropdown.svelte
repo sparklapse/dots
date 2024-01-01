@@ -60,6 +60,7 @@
 <div class="relative w-fit" bind:this={container}>
   <button
     class={classes}
+    type="button"
     on:click={() => {
       open = !open;
     }}
