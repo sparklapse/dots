@@ -1,10 +1,10 @@
 import { getInput, getInputPreview, getObs } from "$lib/obs-ws";
 import { createSource } from "$lib/overlay";
-import DisplayCapture, { label, transform, options } from "./DisplayCapture.svelte";
-import MonitorSelect from "./MonitorSelect.svelte";
+import WindowCapture, { label, transform, options } from "./WindowCapture.svelte";
+import WindowSelect from "./WindowSelect.svelte";
 import type { Source } from "$lib/overlay";
 
-export const displayCaptureSource = class extends createSource(DisplayCapture, {
+export const windowCaptureSource = class extends createSource(WindowCapture, {
   transform,
   options,
 }) {
@@ -16,14 +16,14 @@ export const displayCaptureSource = class extends createSource(DisplayCapture, {
     this.setAttribute("preview", preview);
     this.preview = preview;
   }
-  async selectMonitor(source: Source<{ enabled: boolean; inputKind: string }>) {
+  async selectWindow(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
     const input = await getInput(source);
 
-    const monitors = (
+    const windows = (
       await obs.call("GetInputPropertiesListPropertyItems", {
         inputName: input.label,
-        propertyName: "monitor_id",
+        propertyName: "window",
       })
     ).propertyItems.map(({ itemEnabled, itemName, itemValue }) => ({
       enabled: itemEnabled as boolean,
@@ -31,35 +31,33 @@ export const displayCaptureSource = class extends createSource(DisplayCapture, {
       value: itemValue as string,
     }));
 
-    monitors.unshift({
+    windows.unshift({
       enabled: false,
       label: "DUMMY",
       value: "DUMMY",
     });
 
-    const selector = new MonitorSelect({
+    const selector = new WindowSelect({
       target: document.body,
       props: {
-        items: monitors,
+        items: windows,
       },
     });
 
     selector.$on("close", async (ev) => {
-      const monitorId = ev.detail;
+      const windowId = ev.detail;
 
       await obs.call("SetInputSettings", {
         inputName: input.label,
         inputSettings: {
-          monitor_id: monitorId,
+          window: windowId,
         },
       });
 
-      setTimeout(() => {
-        this.showPreview(source);
-      }, 500);
+      await this.showPreview(source);
       selector.$destroy();
     });
   }
 };
 
-customElements.define("obs-" + label, displayCaptureSource);
+customElements.define("obs-" + label, windowCaptureSource);

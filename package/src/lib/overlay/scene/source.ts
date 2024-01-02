@@ -1,6 +1,6 @@
 import type { ComponentType } from "svelte";
 import type { Field, FieldValues } from "../field/index.js";
-import type { Transform } from "../scene/types.js";
+import type { Transform } from "./types.js";
 
 export type DotsSource = typeof HTMLElement & {
   defaultProps: {

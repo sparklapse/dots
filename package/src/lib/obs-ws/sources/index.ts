@@ -1,8 +1,8 @@
-import { displayCaptureLabel, displayCaptureSource } from "./display-capture";
+export const load = async () => {
+  const displayCapture = import("./display-capture");
+  const windowCapture = await import("./window-capture");
 
-export const load = () => {
-  if (!customElements.get("obs-" + displayCaptureLabel))
-    customElements.define("obs-" + displayCaptureLabel, displayCaptureSource);
+  await Promise.allSettled([displayCapture, windowCapture]);
 };
 
-export const tags = ["obs-" + displayCaptureLabel];
+export const tags = ["obs-display-capture", "obs-window-capture"];

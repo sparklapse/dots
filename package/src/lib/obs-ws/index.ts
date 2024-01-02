@@ -1,5 +1,6 @@
-import { writable } from "svelte/store";
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js/msgpack";
+import { writable } from "svelte/store";
+import { syncs } from "./sources/syncs";
 import type { Readable } from "svelte/store";
 import type { Source, Sources } from "$lib/overlay";
 
@@ -186,15 +187,26 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
   };
 };
 
-export const getInputPreview = async (source: Source<{ enabled: boolean; inputKind: string }>) => {
+export const getInputPreview = async (input: Awaited<ReturnType<typeof getInput>>) => {
   const obs = await getObs();
-  const input = await getInput(source);
 
-  // TODO: Practica
-  const { imageData } = await obs.call("GetSourceScreenshot", {
-    imageFormat: "png",
-    sourceName: input.label,
-  });
+  try {
+    const { imageData } = await obs.call("GetSourceScreenshot", {
+      imageFormat: "png",
+      sourceName: input.label,
+    });
 
-  return imageData;
+    return imageData;
+  } catch (err) {
+    return "error";
+  }
+};
+
+export const syncObsSources = async (sources: Source<{ inputKind: string }>[]) => {
+  for (const source of sources) {
+    const sync = syncs[source.options.inputKind];
+
+    // @ts-expect-error - This should always be fine but types just aren't working
+    if (sync) await sync(source);
+  }
 };

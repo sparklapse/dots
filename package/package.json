@@ -75,6 +75,7 @@
   "dependencies": {
     "clsx": "^2.0.0",
     "nanoid": "^5.0.4",
-    "obs-websocket-js": "latest"
+    "obs-websocket-js": "latest",
+    "pratica": "^2.2.0"
   }
 }

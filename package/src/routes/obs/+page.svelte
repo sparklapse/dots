@@ -1,11 +1,17 @@
 <script lang="ts">
   import { nanoid } from "nanoid";
   import { Editor } from "$lib/overlay";
-  import { isIdentified, connect, disconnect, cleanRemoteSources, getObs } from "$lib/obs-ws";
+  import {
+    isIdentified,
+    connect,
+    disconnect,
+    cleanRemoteSources,
+    getObs,
+    syncObsSources,
+  } from "$lib/obs-ws";
   import { onMount } from "svelte";
-  import type { Sources } from "$lib/overlay";
-  import { tags, load } from "$lib/obs-ws/sources-proto";
-  import type { ObsSource } from "$lib/obs-ws/sources-proto";
+  import { load, tags } from "$lib/obs-ws/sources";
+  import type { DotsSource, Source, Sources } from "$lib/overlay";
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
@@ -17,7 +23,7 @@
 
   const addSource = (tag: string) => {
     return async () => {
-      const elem = (await customElements.whenDefined(tag)) as ObsSource;
+      const elem = (await customElements.whenDefined(tag)) as DotsSource;
 
       sources = [
         ...sources,
@@ -35,21 +41,7 @@
   };
 
   const syncToObs = async () => {
-    for (const source of sources) {
-      // In an actual scene, do an if (source.tag.startsWith("obs-")) to see if obs processing needed
-      const elem = customElements.get(source.tag) as ObsSource;
-
-      try {
-        await elem?.toObs(source);
-      } catch (e) {
-        window.alert("Failed to sync to OBS");
-        console.error(e);
-      }
-
-      if (elem.showPreview) {
-        await elem.showPreview(source);
-      }
-    }
+    await syncObsSources(sources as Source<{ inputKind: string }>[]);
 
     await cleanRemoteSources(sources);
   };
@@ -57,7 +49,11 @@
   const testObs = async () => {
     const obs = await getObs();
 
-    console.log(await obs.call("GetInputKindList"));
+    console.log(
+      await obs.call("GetInputDefaultSettings", {
+        inputKind: "window_capture",
+      }),
+    );
   };
 </script>
 
