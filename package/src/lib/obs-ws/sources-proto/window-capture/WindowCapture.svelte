@@ -1,9 +1,8 @@
 <script lang="ts" context="module">
   import { field } from "$lib/overlay";
-  import { getObs, getDotsScene, getInput } from "$lib/obs-ws";
-  import type { Source, InferFieldValues } from "$lib/overlay";
 
-  export const label = "display-capture";
+  // Dots Source config
+  export const label = "window-capture";
   export const transform = {
     x: 0,
     y: 0,
@@ -12,51 +11,32 @@
   };
   export const options = {
     showPreview: field("action", "Show Preview"),
-    selectMonitor: field("action", "Select Monitor"),
+    selectWindow: field("action", "Select Window"),
     enabled: field("checkbox", true),
-    inputKind: field("readonly", "monitor_capture"),
+    inputKind: field("readonly", "window_capture"),
+    captureCursor: field("checkbox", true),
+    clientArea: field("checkbox", true),
+    forceSDR: field("checkbox", false),
+    method: field("select", "0", {
+      items: [
+        {
+          label: "Automatic",
+          value: "0",
+        },
+        {
+          label: "DXGI Desktop Duplication",
+          value: "1",
+        },
+        {
+          label: "Window 10 (1903 and up)",
+          value: "2",
+        },
+      ],
+    }),
     cropLeft: field("number", 0),
     cropRight: field("number", 0),
     cropTop: field("number", 0),
     cropBottom: field("number", 0),
-  };
-
-  export const toObs = async (source: Source<InferFieldValues<typeof options>>) => {
-    const obs = await getObs();
-    const scene = await getDotsScene();
-    const obsInput = await getInput(source);
-
-    const transform = {
-      positionX: source.transform.x,
-      positionY: source.transform.y,
-      boundsWidth: Math.max(source.transform.width, 1),
-      boundsHeight: Math.max(source.transform.height, 1),
-      cropLeft: source.options.cropLeft,
-      cropRight: source.options.cropRight,
-      cropTop: source.options.cropTop,
-      cropBottom: source.options.cropBottom,
-    };
-
-    await obs.call("SetSceneItemTransform", {
-      sceneName: scene,
-      sceneItemId: obsInput!.itemId,
-      sceneItemTransform: {
-        boundsType: "OBS_BOUNDS_MAX_ONLY",
-        ...transform,
-      },
-    });
-
-    await obs.call("SetSceneItemEnabled", {
-      sceneItemEnabled: source.options.enabled,
-      sceneName: scene,
-      sceneItemId: obsInput.itemId,
-    });
-
-    if (obsInput.label !== `${source.label}#${source.id}`)
-      await obs.call("SetInputName", {
-        inputName: obsInput.label,
-        newInputName: `${source.label}#${source.id}`,
-      });
   };
 </script>
 

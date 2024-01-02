@@ -1,14 +1,54 @@
-import { getInput, getObs } from "$lib/obs-ws";
+import { getDotsScene, getInput, getObs } from "$lib/obs-ws";
 import { createSource } from "$lib/overlay";
-import DisplayCapture, { label, transform, options, toObs } from "./DisplayCapture.svelte";
-import MonitorSelect from "$lib/obs-ws/sources-proto/display-capture/MonitorSelect.svelte";
-import type { Source } from "$lib/overlay";
+import type { InferFieldValues } from "$lib/overlay/field";
+import type { Source } from "$lib/overlay/scene/types";
+import DisplayCapture, { label, transform, options } from "./DisplayCapture.svelte";
+import MonitorSelect from "./MonitorSelect.svelte";
 
-export const displayCaptureLabel = label;
-export const displayCaptureSource = class extends createSource(DisplayCapture, {
+type DisplayCaptureSource = Source<InferFieldValues<typeof options>>;
+
+const displayCapture = class extends createSource(DisplayCapture, {
   transform,
   options,
 }) {
+  static async toObs(source: DisplayCaptureSource) {
+    const obs = await getObs();
+    const scene = await getDotsScene();
+    const obsInput = await getInput(source);
+
+    const transform = {
+      positionX: source.transform.x,
+      positionY: source.transform.y,
+      boundsWidth: Math.max(source.transform.width, 1),
+      boundsHeight: Math.max(source.transform.height, 1),
+      cropLeft: source.options.cropLeft,
+      cropRight: source.options.cropRight,
+      cropTop: source.options.cropTop,
+      cropBottom: source.options.cropBottom,
+    };
+
+    await obs.call("SetSceneItemTransform", {
+      sceneName: scene,
+      sceneItemId: obsInput!.itemId,
+      sceneItemTransform: {
+        boundsType: "OBS_BOUNDS_MAX_ONLY",
+        ...transform,
+      },
+    });
+
+    await obs.call("SetSceneItemEnabled", {
+      sceneItemEnabled: source.options.enabled,
+      sceneName: scene,
+      sceneItemId: obsInput.itemId,
+    });
+
+    if (obsInput.label !== `${source.label}#${source.id}`)
+      await obs.call("SetInputName", {
+        inputName: obsInput.label,
+        newInputName: `${source.label}#${source.id}`,
+      });
+  }
+
   async showPreview(source: Source<{ enabled: boolean; inputKind: string }>) {
     if (!source.options.enabled) return;
 
@@ -30,6 +70,7 @@ export const displayCaptureSource = class extends createSource(DisplayCapture, {
       this.preview = "error";
     }
   }
+
   async selectMonitor(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
     const input = await getInput(source);
@@ -73,6 +114,5 @@ export const displayCaptureSource = class extends createSource(DisplayCapture, {
     });
   }
 };
-export const displayCaptureSync = {
-  [options.inputKind.value]: toObs,
-};
+
+customElements.define("obs-" + label, displayCapture);

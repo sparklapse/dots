@@ -1,4 +1,4 @@
-import { get, writable } from "svelte/store";
+import { writable } from "svelte/store";
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js/msgpack";
 import type { Readable } from "svelte/store";
 import type { Source, Sources } from "$lib/overlay";
@@ -142,8 +142,6 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
   const obs = await getObs();
   const scene = await getDotsScene();
 
-  if (!get(isIdentified)) await connect();
-
   let { sceneItems } = await obs.call("GetSceneItemList", {
     sceneName: scene,
   });
@@ -186,4 +184,17 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
       height: transform.sourceHeight as number,
     },
   };
+};
+
+export const getInputPreview = async (source: Source<{ enabled: boolean; inputKind: string }>) => {
+  const obs = await getObs();
+  const input = await getInput(source);
+
+  // TODO: Practica
+  const { imageData } = await obs.call("GetSourceScreenshot", {
+    imageFormat: "png",
+    sourceName: input.label,
+  });
+
+  return imageData;
 };

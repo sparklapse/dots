@@ -1,16 +1,8 @@
-import type { DotsSource } from "$lib/overlay";
-import type { Source } from "$lib/overlay/scene/types";
+import { displayCaptureLabel, displayCaptureSource } from "./display-capture";
 
-export type ObsSource = DotsSource & {
-  toObs: (source: Source) => Promise<void>;
-  showPreview?: (source: Source) => Promise<void>;
+export const load = () => {
+  if (!customElements.get("obs-" + displayCaptureLabel))
+    customElements.define("obs-" + displayCaptureLabel, displayCaptureSource);
 };
 
-export const load = async () => {
-  const displayCapture = import("./display-capture");
-  const browser = import("./browser");
-
-  await Promise.allSettled([displayCapture, browser]);
-};
-
-export const tags = ["obs-display-capture", "obs-browser"];
+export const tags = ["obs-" + displayCaptureLabel];

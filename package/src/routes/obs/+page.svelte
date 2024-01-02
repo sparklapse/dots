@@ -1,11 +1,11 @@
 <script lang="ts">
   import { nanoid } from "nanoid";
   import { Editor } from "$lib/overlay";
-  import { isIdentified, connect, disconnect, cleanRemoteSources } from "$lib/obs-ws";
+  import { isIdentified, connect, disconnect, cleanRemoteSources, getObs } from "$lib/obs-ws";
   import { onMount } from "svelte";
-  import { tags, load } from "$lib/obs-ws/sources";
   import type { Sources } from "$lib/overlay";
-  import type { ObsSource } from "$lib/obs-ws/sources";
+  import { tags, load } from "$lib/obs-ws/sources-proto";
+  import type { ObsSource } from "$lib/obs-ws/sources-proto";
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
@@ -53,6 +53,12 @@
 
     await cleanRemoteSources(sources);
   };
+
+  const testObs = async () => {
+    const obs = await getObs();
+
+    console.log(await obs.call("GetInputKindList"));
+  };
 </script>
 
 <div class="dots-card">
@@ -68,6 +74,7 @@
         <button class="dots-btn" on:click={() => connect()}>Connect</button>
         <button class="dots-btn" on:click={() => disconnect()}>Disconnect</button>
         <button class="dots-btn" on:click={() => syncToObs()}>Sync</button>
+        <button class="dots-btn" on:click={() => testObs()}>Test</button>
       </div>
       <div>
         <h2 class="font-bold">Components</h2>
