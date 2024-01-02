@@ -2,9 +2,9 @@
   import { Dropdown } from "$lib/ui";
   import { createEventDispatcher, onMount } from "svelte";
 
-  export let items: { label: string; value: number }[] = [{ label: "DUMMY", value: -1 }];
+  export let items: { label: string; value: string }[] = [{ label: "DUMMY", value: "DUMMY" }];
 
-  const dispatch = createEventDispatcher<{ close: number }>();
+  const dispatch = createEventDispatcher<{ close: string }>();
 
   let dialog: HTMLDialogElement;
   let selected = 0;
@@ -16,7 +16,7 @@
 </script>
 
 <dialog
-  class="grid place-content-center dots-card"
+  class="grid place-content-center dots-card overflow-visible"
   on:close={() => dispatch("close", value)}
   bind:this={dialog}
 >

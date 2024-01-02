@@ -1,6 +1,6 @@
 <script lang="ts">
   export let label: string;
-  export let value: unknown;
+  export let value: string;
 </script>
 
 <div class="flex justify-between">

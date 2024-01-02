@@ -13,11 +13,8 @@
     // There is no way over OBS WebSockets to select a monitor
     // selectMonitor: field("action", "Select Monitor"),
     showPreview: field("action", "Show Preview"),
-    enabled: field("checkbox", false),
-    monitor: field(
-      "helper",
-      "Monitors can only be selected in OBS. We're working on a fix for this!",
-    ),
+    selectMonitor: field("action", "Select Monitor"),
+    enabled: field("checkbox", true),
     inputKind: field("readonly", "monitor_capture"),
     captureCursor: field("checkbox", true),
     forceSDR: field("checkbox", false),

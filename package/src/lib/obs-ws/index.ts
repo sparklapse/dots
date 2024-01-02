@@ -151,11 +151,16 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
   const exists = sceneItems.some((item) => (item.sourceName as string).endsWith(source.id));
 
   if (!exists) {
+    const { defaultInputSettings } = await obs.call("GetInputDefaultSettings", {
+      inputKind: source.options.inputKind,
+    });
+
     await obs.call("CreateInput", {
       inputKind: source.options.inputKind,
       sceneName: scene,
       inputName: `${source.label}#${source.id}`,
       sceneItemEnabled: false,
+      inputSettings: defaultInputSettings,
     });
 
     sceneItems = (

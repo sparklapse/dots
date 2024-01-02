@@ -1,59 +1,11 @@
 import { getDotsScene, getInput, getObs } from "$lib/obs-ws";
 import { createSource } from "$lib/overlay";
+import type { InferFieldValues } from "$lib/overlay/field";
 import type { Source } from "$lib/overlay/scene/types";
 import DisplayCapture, { label, transform, options } from "./DisplayCapture.svelte";
+import MonitorSelect from "./MonitorSelect.svelte";
 
-type DisplayCaptureOptions = {
-  inputKind: string;
-  enabled: boolean;
-  captureCursor: boolean;
-  forceSDR: boolean;
-  method: 0 | 1 | 2;
-  cropLeft: number;
-  cropRight: number;
-  cropTop: number;
-  cropBottom: number;
-};
-type DisplayCaptureSource = Source<DisplayCaptureOptions>;
-// type OBSDisplayCapture = {
-//   item: {
-//     inputKind: "monitor_capture";
-//     isGroup: unknown;
-//     sceneItemBlendMode: "OBS_BLEND_NORMAL" | unknown;
-//     sceneItemEnabled: boolean;
-//     sceneItemId: number;
-//     sceneItemIndex: number;
-//     sceneItemLocked: boolean;
-//     sceneItemTransform: {
-//       alignment: number;
-//       boundsAlignment: number;
-//       boundsHeight: number;
-//       boundsType: "OBS_BOUNDS_NONE" | unknown;
-//       boundsWidth: number;
-//       cropBottom: number;
-//       cropLeft: number;
-//       cropRight: number;
-//       cropTop: number;
-//       height: number;
-//       positionX: number;
-//       positionY: number;
-//       rotation: number;
-//       scaleX: number;
-//       scaleY: number;
-//       sourceHeight: number;
-//       sourceWidth: number;
-//       width: number;
-//     };
-//     sourceName: string;
-//     sourceType: "OBS_SOURCE_TYPE_INPUT" | unknown;
-//   };
-//   settings: {
-//     method?: 0 | 1 | 2;
-//     capture_cursor?: boolean;
-//     force_sdr?: boolean;
-//     monitor_id: string;
-//   };
-// };
+type DisplayCaptureSource = Source<InferFieldValues<typeof options>>;
 
 const displayCapture = class extends createSource(DisplayCapture, {
   transform,
@@ -100,17 +52,9 @@ const displayCapture = class extends createSource(DisplayCapture, {
   #interval: number | NodeJS.Timer | undefined;
   async connectedCallback() {
     await super.connectedCallback();
-
-    // const refresh = () => {
-    //   if (get(isIdentified)) this.showPreview();
-    //   this.#interval = setTimeout(refresh, 1000);
-    // };
-    // refresh();
   }
 
   async disconnectedCallback() {
-    // clearTimeout(this.#interval as number);
-    // this.#interval = undefined;
     await super.disconnectedCallback();
   }
 
@@ -134,6 +78,49 @@ const displayCapture = class extends createSource(DisplayCapture, {
       this.setAttribute("preview", "error");
       this.preview = "error";
     }
+  }
+
+  async selectMonitor(source: Source<{ enabled: boolean; inputKind: string }>) {
+    const obs = await getObs();
+    const input = await getInput(source);
+
+    const monitors = (
+      await obs.call("GetInputPropertiesListPropertyItems", {
+        inputName: input.label,
+        propertyName: "monitor_id",
+      })
+    ).propertyItems.map(({ itemEnabled, itemName, itemValue }) => ({
+      enabled: itemEnabled as boolean,
+      label: itemName as string,
+      value: itemValue as string,
+    }));
+
+    monitors.unshift({
+      enabled: false,
+      label: "DUMMY",
+      value: "DUMMY",
+    });
+
+    const selector = new MonitorSelect({
+      target: document.body,
+      props: {
+        items: monitors,
+      },
+    });
+
+    selector.$on("close", async (ev) => {
+      const monitorId = ev.detail;
+
+      await obs.call("SetInputSettings", {
+        inputName: input.label,
+        inputSettings: {
+          monitor_id: monitorId,
+        },
+      });
+
+      await this.showPreview(source);
+      selector.$destroy();
+    });
   }
 };
 

@@ -15,6 +15,10 @@ export type Field<K extends FieldKeys = FieldKeys> = {
     | object;
 };
 
+export type InferFieldValues<T extends Record<string, Field>> = {
+  [K in keyof T]: T[K]["value"];
+};
+
 type FieldOptions<K extends FieldKeys = FieldKeys> = Field<K>["props"];
 
 export const field = <K extends FieldKeys>(
