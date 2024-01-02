@@ -4,7 +4,7 @@ import WindowCapture, { label, transform, options } from "./WindowCapture.svelte
 import WindowSelect from "./WindowSelect.svelte";
 import type { Source } from "$lib/overlay";
 
-export const windowCaptureSource = class extends createSource(WindowCapture, {
+const windowCaptureSource = class extends createSource(WindowCapture, {
   transform,
   options,
 }) {

@@ -4,7 +4,7 @@ import DisplayCapture, { label, transform, options } from "./DisplayCapture.svel
 import MonitorSelect from "./MonitorSelect.svelte";
 import type { Source } from "$lib/overlay";
 
-export const displayCaptureSource = class extends createSource(DisplayCapture, {
+const displayCaptureSource = class extends createSource(DisplayCapture, {
   transform,
   options,
 }) {
