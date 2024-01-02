@@ -8,6 +8,7 @@
     cleanRemoteSources,
     getObs,
     syncObsSources,
+    getDotsScene,
   } from "$lib/obs-ws";
   import { onMount } from "svelte";
   import { load, tags } from "$lib/obs-ws/sources";
@@ -48,10 +49,17 @@
 
   const testObs = async () => {
     const obs = await getObs();
+    const scene = await getDotsScene();
 
+    // console.log(
+    //   await obs.call("GetSceneItemList", {
+    //     sceneName: scene,
+    //   }),
+    // );
     console.log(
-      await obs.call("GetInputDefaultSettings", {
-        inputKind: "window_capture",
+      await obs.call("GetSceneItemTransform", {
+        sceneName: scene,
+        sceneItemId: 81,
       }),
     );
   };

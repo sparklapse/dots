@@ -37,7 +37,7 @@ export const browser = class extends createSource(Browser, {
       sceneName: scene,
       sceneItemId: obsInput!.itemId,
       sceneItemTransform: {
-        boundsType: "OBS_BOUNDS_MAX_ONLY",
+        boundsType: "OBS_BOUNDS_SCALE_INNER",
         ...transform,
       },
     });

@@ -31,7 +31,7 @@ const displayCapture = class extends createSource(DisplayCapture, {
       sceneName: scene,
       sceneItemId: obsInput!.itemId,
       sceneItemTransform: {
-        boundsType: "OBS_BOUNDS_MAX_ONLY",
+        boundsType: "OBS_BOUNDS_SCALE_INNER",
         ...transform,
       },
     });
