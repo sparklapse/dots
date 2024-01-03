@@ -21,7 +21,7 @@
   bind:this={dialog}
 >
   <form class="flex flex-col gap-2" method="dialog">
-    <h1 class="text-xl font-bold">Select a monitor</h1>
+    <h1 class="text-xl font-bold">Select a Window</h1>
     <Dropdown class="dots-input">
       <span>{items[selected].label}</span>
       <div class="bg-white shadow w-full" slot="dropdown">

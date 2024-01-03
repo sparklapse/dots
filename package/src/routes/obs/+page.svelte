@@ -57,9 +57,8 @@
     //   }),
     // );
     console.log(
-      await obs.call("GetSceneItemTransform", {
-        sceneName: scene,
-        sceneItemId: 81,
+      await obs.call("GetInputSettings", {
+        inputName: "test"
       }),
     );
   };
