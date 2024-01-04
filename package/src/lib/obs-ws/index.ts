@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const EVENTS = EventSubscription.InputVolumeMeters;
+const EVENTS = EventSubscription.InputVolumeMeters | EventSubscription.All;
 
 const identified = writable(false);
 export const isIdentified = { subscribe: identified.subscribe } as Readable<boolean>;
