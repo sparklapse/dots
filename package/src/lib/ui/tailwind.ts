@@ -17,6 +17,16 @@ export const dotsUIPlugin = plugin.withOptions(
         ".scrollbar-thin": {
           scrollbarWidth: "thin",
         },
+        ".text-sideways": {
+          textOrientation: "mixed",
+          writingMode: "sideways-lr",
+        },
+        ".text-sideways-lr": {
+          writingMode: "sideways-lr",
+        },
+        ".text-sideways-rl": {
+          writingMode: "sideways-rl",
+        },
         // Backgrounds
         ".dots-bg": {
           background: `linear-gradient(45deg, ${theme("colors.dots-coffee.50")} 0%, ${theme(

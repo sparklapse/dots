@@ -6,12 +6,12 @@
     connect,
     disconnect,
     cleanRemoteSources,
-    getObs,
     syncObsSources,
-    getDotsScene,
   } from "$lib/obs-ws";
+  import { getAudioMeters } from "$lib/obs-ws/audio";
   import { onMount } from "svelte";
   import { load, tags } from "$lib/obs-ws/sources";
+  import Meters from "$lib/obs-ws/audio/Meters.svelte";
   import type { DotsSource, Source, Sources } from "$lib/overlay";
 
   let inspector: HTMLDivElement;
@@ -48,19 +48,7 @@
   };
 
   const testObs = async () => {
-    const obs = await getObs();
-    const scene = await getDotsScene();
-
-    // console.log(
-    //   await obs.call("GetSceneItemList", {
-    //     sceneName: scene,
-    //   }),
-    // );
-    console.log(
-      await obs.call("GetInputSettings", {
-        inputName: "test"
-      }),
-    );
+    console.log(await getAudioMeters());
   };
 </script>
 
@@ -78,6 +66,10 @@
         <button class="dots-btn" on:click={() => disconnect()}>Disconnect</button>
         <button class="dots-btn" on:click={() => syncToObs()}>Sync</button>
         <button class="dots-btn" on:click={() => testObs()}>Test</button>
+      </div>
+      <div>
+        <h2 class="font-bold">Audio</h2>
+        <Meters />
       </div>
       <div>
         <h2 class="font-bold">Components</h2>
