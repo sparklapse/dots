@@ -67,11 +67,4 @@
       overlay 0.2s ease-out allow-discrete,
       display 0.2s ease-out allow-discrete;
   }
-
-  @starting-style {
-    dialog[open] {
-      opacity: 0;
-      transform: translateY(-1rem);
-    }
-  }
 </style>

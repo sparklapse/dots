@@ -25,7 +25,15 @@
   export const toObs = async (source: Source<InferFieldValues<typeof options>>) => {
     const obs = await getObs();
     const scene = await getDotsScene();
-    const obsInput = await getInput(source);
+    const obsInput = (await getInput(source)).cata({
+      Ok: (input) => input,
+      Err: (err) => {
+        console.error(err);
+        return null;
+      },
+    });
+
+    if (!obsInput) return;
 
     const transform = {
       positionX: source.transform.x,

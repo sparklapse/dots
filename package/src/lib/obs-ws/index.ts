@@ -1,6 +1,8 @@
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js/msgpack";
-import { writable } from "svelte/store";
+import { Err, Ok } from "pratica";
+import { get, writable } from "svelte/store";
 import { syncs } from "./sources/syncs";
+import type { Result } from "pratica";
 import type { Readable } from "svelte/store";
 import type { Source, Sources } from "$lib/overlay";
 
@@ -115,9 +117,12 @@ export const getDotsScene = () =>
     }, 10000);
   });
 
-export const cleanRemoteSources = async (sources: Sources) => {
+export const cleanRemoteSources = async (sources: Sources): Promise<Result<void, string>> => {
   const obs = await getObs();
   const scene = await getDotsScene();
+
+  if (!get(isIdentified)) return Err("OBS is not connected");
+
   const { sceneItems } = await obs.call("GetSceneItemList", {
     sceneName: scene,
   });
@@ -137,11 +142,31 @@ export const cleanRemoteSources = async (sources: Sources) => {
       },
     })),
   );
+
+  return Ok();
 };
 
-export const getInput = async (source: Source<{ enabled: boolean; inputKind: string }>) => {
+export type Input = {
+  itemId: number;
+  index: number;
+  label: string;
+  enabled: boolean;
+  locked: boolean;
+  transform: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+};
+
+export const getInput = async (
+  source: Source<{ enabled: boolean; inputKind: string }>,
+): Promise<Result<Input, string>> => {
   const obs = await getObs();
   const scene = await getDotsScene();
+
+  if (!get(isIdentified)) return Err("OBS is not connected");
 
   let { sceneItems } = await obs.call("GetSceneItemList", {
     sceneName: scene,
@@ -172,7 +197,7 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
   const item = sceneItems.find((item) => (item.sourceName as string).endsWith(source.id))!;
   const transform = item.sceneItemTransform as Record<string, unknown>;
 
-  return {
+  return Ok({
     itemId: item.sceneItemId as number,
     index: item.sceneItemIndex as number,
     label: item.sourceName as string,
@@ -184,16 +209,18 @@ export const getInput = async (source: Source<{ enabled: boolean; inputKind: str
       width: transform.sourceWidth as number,
       height: transform.sourceHeight as number,
     },
-  };
+  });
 };
 
 export const getInputPreview = async (input: Awaited<ReturnType<typeof getInput>>) => {
   const obs = await getObs();
 
+  if (input.isErr()) return "error";
+
   try {
     const { imageData } = await obs.call("GetSourceScreenshot", {
       imageFormat: "png",
-      sourceName: input.label,
+      sourceName: (input.value() as Input).label,
     });
 
     return imageData;

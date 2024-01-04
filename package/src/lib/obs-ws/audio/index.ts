@@ -31,41 +31,48 @@ const setupAudio = async () => {
     subscribe: meters.subscribe,
   } as Readable<AudioMeters>;
 
-  const initialInputs = (await obs.call("GetInputList")).inputs.filter(
-    ({ inputKind }) =>
-      inputKind === "wasapi_output_capture" ||
-      inputKind === "wasapi_input_capture" ||
-      inputKind === "wasapi_process_output_capture",
-  );
+  const getAllInputs = async () => {
+    const initialInputs = (await obs.call("GetInputList")).inputs.filter(
+      ({ inputKind }) =>
+        inputKind === "wasapi_output_capture" ||
+        inputKind === "wasapi_input_capture" ||
+        inputKind === "wasapi_process_output_capture",
+    );
 
-  for (const input of initialInputs) {
-    const { inputName } = input as { inputName: string };
-    const { inputVolumeDb, inputVolumeMul } = await obs.call("GetInputVolume", { inputName });
-    const { inputMuted } = await obs.call("GetInputMute", { inputName });
+    for (const input of initialInputs) {
+      const { inputName } = input as { inputName: string };
+      const { inputVolumeDb, inputVolumeMul } = await obs.call("GetInputVolume", { inputName });
+      const { inputMuted } = await obs.call("GetInputMute", { inputName });
 
-    meters.update((meters) => {
-      return {
-        ...meters,
-        [inputName]: {
-          peak: {
-            left: 0,
-            right: 0,
+      meters.update((meters) => {
+        return {
+          ...meters,
+          [inputName]: {
+            peak: {
+              left: 0,
+              right: 0,
+            },
+            volume: {
+              muted: inputMuted,
+              gain: parseFloat(inputVolumeDb.toFixed(2)),
+              multiplier: inputVolumeMul,
+            },
           },
-          volume: {
-            muted: inputMuted,
-            gain: parseFloat(inputVolumeDb.toFixed(2)),
-            multiplier: inputVolumeMul,
-          },
-        },
-      };
-    });
-  }
+        };
+      });
+    }
+  };
+  await getAllInputs();
+
+  obs.on("Identified", getAllInputs);
 
   obs.on("InputVolumeMeters", ({ inputs }) => {
     for (const { inputLevelsMul, inputName } of inputs) {
       const [left, right] = inputLevelsMul as [number[], number[]];
       meters.update((meters) => {
-        const meter = meters[inputName as string] || {};
+        const meter = meters[inputName as string];
+        if (!meter) return meters;
+
         return {
           ...meters,
           [inputName as string]: {
@@ -83,7 +90,9 @@ const setupAudio = async () => {
 
   obs.on("InputVolumeChanged", ({ inputName, inputVolumeDb, inputVolumeMul }) => {
     meters.update((meters) => {
-      const meter = meters[inputName] || {};
+      const meter = meters[inputName as string];
+      if (!meter) return meters;
+
       return {
         ...meters,
         [inputName]: {
@@ -100,7 +109,9 @@ const setupAudio = async () => {
 
   obs.on("InputMuteStateChanged", ({ inputName, inputMuted }) => {
     meters.update((meters) => {
-      const meter = meters[inputName] || {};
+      const meter = meters[inputName as string];
+      if (!meter) return meters;
+
       return {
         ...meters,
         [inputName]: {

@@ -18,7 +18,12 @@ const displayCaptureSource = class extends createSource(DisplayCapture, {
   }
   async selectMonitor(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
-    const input = await getInput(source);
+    const input = (await getInput(source)).cata({
+      Ok: (input) => input,
+      Err: () => {
+        throw new Error("Input not found");
+      },
+    });
 
     const monitors = (
       await obs.call("GetInputPropertiesListPropertyItems", {

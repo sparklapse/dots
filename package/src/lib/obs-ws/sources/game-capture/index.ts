@@ -18,7 +18,12 @@ const gameCaptureSource = class extends createSource(GameCapture, {
   }
   async selectGame(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
-    const input = await getInput(source);
+    const input = (await getInput(source)).cata({
+      Ok: (input) => input,
+      Err: () => {
+        throw new Error("Input not found");
+      },
+    });
 
     const games = (
       await obs.call("GetInputPropertiesListPropertyItems", {
