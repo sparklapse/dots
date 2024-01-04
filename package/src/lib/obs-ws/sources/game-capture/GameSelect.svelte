@@ -22,7 +22,7 @@
 >
   <form class="flex flex-col gap-2" method="dialog">
     <h1 class="text-xl font-bold">Select a Window</h1>
-    <Dropdown class="dots-input">
+    <Dropdown class="dots-input w-52">
       <span>{items[selected].label}</span>
       <div class="bg-white shadow w-full" slot="dropdown">
         <div class="h-full max-h-[20rem] overflow-y-auto scrollbar-thin">
