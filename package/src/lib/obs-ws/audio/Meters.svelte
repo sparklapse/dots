@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAudioMeters, setChannelGainDb, setChannelGainMul } from ".";
+  import { getAudioMeters, setChannelGainDb, setChannelGainMul, setChannelMuted } from ".";
   import type { AudioMeters } from ".";
   import type { Readable } from "svelte/store";
 
@@ -13,7 +13,7 @@
 {#if $meters}
   <div class="flex gap-2 overflow-x-auto stable-gutter scrollbar-thin pb-2">
     {#each Object.entries($meters) as [label, meter]}
-      <article class="grid grid-cols-[1fr,1rem,1rem] gap-1 w-16 flex-shrink-0">
+      <article class="grid grid-cols-[1fr,1rem,1rem] gap-1 w-20 flex-shrink-0">
         <h2
           class="text-sideways font-semibold max-h-48 w-fit whitespace-nowrap justify-self-end overflow-clip text-clip"
         >
@@ -44,20 +44,29 @@
             // await setChannelGainMul(label, Math.min(Math.log(v * 120 + 1) / Math.log(75), 1));
           }}
         />
-        <input
-          class="col-span-3 dots-input w-full text-sm"
-          type="number"
-          min={-100}
-          max={26}
-          step="0.1"
-          value={meter.volume.gain}
-          on:change={async (ev) => {
-            const v = parseFloat(ev.currentTarget.value);
-            if (isNaN(v)) return;
+        <div class="flex w-full gap-1 col-span-3">
+          <input
+            type="checkbox"
+            checked={!meter.volume.muted}
+            on:change={async (ev) => {
+              await setChannelMuted(label, !ev.currentTarget.checked);
+            }}
+          />
+          <input
+            class="dots-input w-full text-sm"
+            type="number"
+            min={-100}
+            max={26}
+            step="0.1"
+            value={meter.volume.gain}
+            on:change={async (ev) => {
+              const v = parseFloat(ev.currentTarget.value);
+              if (isNaN(v)) return;
 
-            await setChannelGainDb(label, v);
-          }}
-        />
+              await setChannelGainDb(label, v);
+            }}
+          />
+        </div>
       </article>
     {/each}
   </div>

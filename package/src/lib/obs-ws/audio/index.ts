@@ -10,6 +10,7 @@ export type AudioMeter = {
     right: number;
   };
   volume: {
+    muted: boolean;
     gain: number;
     multiplier: number;
   };
@@ -40,6 +41,7 @@ const setupAudio = async () => {
   for (const input of initialInputs) {
     const { inputName } = input as { inputName: string };
     const { inputVolumeDb, inputVolumeMul } = await obs.call("GetInputVolume", { inputName });
+    const { inputMuted } = await obs.call("GetInputMute", { inputName });
 
     meters.update((meters) => {
       return {
@@ -50,6 +52,7 @@ const setupAudio = async () => {
             right: 0,
           },
           volume: {
+            muted: inputMuted,
             gain: parseFloat(inputVolumeDb.toFixed(2)),
             multiplier: inputVolumeMul,
           },
@@ -86,8 +89,25 @@ const setupAudio = async () => {
         [inputName]: {
           ...meter,
           volume: {
+            ...meter.volume,
             gain: parseFloat(inputVolumeDb.toFixed(2)),
             multiplier: inputVolumeMul,
+          },
+        },
+      };
+    });
+  });
+
+  obs.on("InputMuteStateChanged", ({ inputName, inputMuted }) => {
+    meters.update((meters) => {
+      const meter = meters[inputName] || {};
+      return {
+        ...meters,
+        [inputName]: {
+          ...meter,
+          volume: {
+            ...meter.volume,
+            muted: inputMuted,
           },
         },
       };
@@ -125,5 +145,13 @@ export const setChannelGainMul = async (channel: string, gain: number) => {
   await obs.call("SetInputVolume", {
     inputName: channel,
     inputVolumeMul: gain,
+  });
+};
+
+export const setChannelMuted = async (channel: string, muted: boolean) => {
+  const obs = await getObs();
+  await obs.call("SetInputMute", {
+    inputName: channel,
+    inputMuted: muted,
   });
 };
