@@ -21,13 +21,13 @@ export const isIdentified = { subscribe: identified.subscribe } as Readable<bool
 export const connect = async (
   port: number = 4455,
   password?: string,
-  scene: string = "overlay",
+  scene: string = window.__dots_obs_scene ?? "overlay",
 ) => {
   const obs = window.__dots_obs ?? new OBSWebSocket();
 
   if (obs.identified) {
     console.warn("OBS is already connected");
-    return obs;
+    return Ok(obs);
   }
 
   obs.on("Identified", () => {
@@ -55,7 +55,8 @@ export const connect = async (
 
   window.__dots_obs = obs;
   window.__dots_obs_scene = "dots#" + scene;
-  return obs;
+
+  return Ok(obs);
 };
 
 export const disconnect = async () => {
@@ -116,6 +117,21 @@ export const getDotsScene = () =>
       reject("OBS is not connected");
     }, 10000);
   });
+
+export const setDotsScene = async (label: string) => {
+  const obs = await getObs();
+
+  if (!get(isIdentified)) return Err("OBS is not connected");
+
+  const { scenes } = await obs.call("GetSceneList");
+  const sceneExists = scenes.some((s) => (s.sceneName as string) == "dots#" + label);
+
+  if (!sceneExists) {
+    await obs.call("CreateScene", { sceneName: "dots#" + label });
+  }
+
+  window.__dots_obs_scene = "dots#" + label;
+};
 
 export const cleanRemoteSources = async (sources: Sources): Promise<Result<void, string>> => {
   const obs = await getObs();
