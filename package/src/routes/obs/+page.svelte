@@ -7,11 +7,11 @@
     disconnect,
     cleanRemoteSources,
     syncObsSources,
-  } from "$lib/obs-ws";
-  import { getAudioMeters } from "$lib/obs-ws/audio";
+    getAudioMeters,
+    ObsAudioMeters,
+  } from "$lib/obs";
   import { onMount } from "svelte";
-  import { load, tags } from "$lib/obs-ws/sources";
-  import Meters from "$lib/obs-ws/audio/Meters.svelte";
+  import { load, tags } from "$lib/obs/sources";
   import type { DotsSource, Source, Sources } from "$lib/overlay";
 
   let inspector: HTMLDivElement;
@@ -69,7 +69,7 @@
       </div>
       <div>
         <h2 class="font-bold">Audio</h2>
-        <Meters />
+        <ObsAudioMeters />
       </div>
       <div>
         <h2 class="font-bold">Components</h2>

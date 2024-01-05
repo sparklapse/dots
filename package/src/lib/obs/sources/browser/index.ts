@@ -1,6 +1,6 @@
 import { createSource } from "$lib/overlay";
 import Browser, { label, transform, options } from "./Browser.svelte";
-import { getInput, getInputPreview } from "$lib/obs-ws";
+import { getInput, getInputPreview } from "$lib/obs/obs";
 import type { Source } from "$lib/overlay";
 
 const browserSource = class extends createSource(Browser, {

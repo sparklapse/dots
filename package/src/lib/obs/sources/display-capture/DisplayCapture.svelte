@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
   import { field } from "$lib/overlay";
-  import { getObs, getDotsScene, getInput } from "$lib/obs-ws";
+  import { getObs, getDotsScene, getInput } from "$lib/obs/obs";
   import type { Source, InferFieldValues } from "$lib/overlay";
 
-  export const label = "window-capture";
+  export const label = "display-capture";
   export const transform = {
     x: 0,
     y: 0,
@@ -12,9 +12,9 @@
   };
   export const options = {
     showPreview: field("action", "Show Preview"),
-    selectWindow: field("action", "Select Window"),
+    selectMonitor: field("action", "Select Monitor"),
     enabled: field("checkbox", true),
-    inputKind: field("readonly", "window_capture"),
+    inputKind: field("readonly", "monitor_capture"),
     cropLeft: field("number", 0),
     cropRight: field("number", 0),
     cropTop: field("number", 0),

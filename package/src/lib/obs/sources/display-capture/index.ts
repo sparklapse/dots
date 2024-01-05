@@ -1,4 +1,4 @@
-import { getInput, getInputPreview, getObs } from "$lib/obs-ws";
+import { getInput, getInputPreview, getObs } from "$lib/obs/obs";
 import { createSource } from "$lib/overlay";
 import DisplayCapture, { label, transform, options } from "./DisplayCapture.svelte";
 import MonitorSelect from "./MonitorSelect.svelte";

@@ -1,10 +1,10 @@
-import { getInput, getInputPreview, getObs } from "$lib/obs-ws";
+import { getInput, getInputPreview, getObs } from "$lib/obs/obs";
 import { createSource } from "$lib/overlay";
-import WindowCapture, { label, transform, options } from "./WindowCapture.svelte";
-import WindowSelect from "./WindowSelect.svelte";
+import GameCapture, { label, transform, options } from "./GameCapture.svelte";
+import GameSelect from "./GameSelect.svelte";
 import type { Source } from "$lib/overlay";
 
-const windowCaptureSource = class extends createSource(WindowCapture, {
+const gameCaptureSource = class extends createSource(GameCapture, {
   transform,
   options,
 }) {
@@ -16,7 +16,7 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
     this.setAttribute("preview", preview);
     this.preview = preview;
   }
-  async selectWindow(source: Source<{ enabled: boolean; inputKind: string }>) {
+  async selectGame(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
     const input = (await getInput(source)).cata({
       Ok: (input) => input,
@@ -25,7 +25,7 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
       },
     });
 
-    const windows = (
+    const games = (
       await obs.call("GetInputPropertiesListPropertyItems", {
         inputName: input.label,
         propertyName: "window",
@@ -36,16 +36,16 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
       value: itemValue as string,
     }));
 
-    windows.unshift({
+    games.unshift({
       enabled: false,
       label: "DUMMY",
       value: "DUMMY",
     });
 
-    const selector = new WindowSelect({
+    const selector = new GameSelect({
       target: document.body,
       props: {
-        items: windows,
+        items: games,
       },
     });
 
@@ -65,4 +65,4 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
   }
 };
 
-customElements.define("obs-" + label, windowCaptureSource);
+customElements.define("obs-" + label, gameCaptureSource);

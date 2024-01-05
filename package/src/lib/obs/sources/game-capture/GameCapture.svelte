@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
   import { field } from "$lib/overlay";
-  import { getObs, getDotsScene, getInput } from "$lib/obs-ws";
+  import { getObs, getDotsScene, getInput } from "$lib/obs/obs";
   import type { Source, InferFieldValues } from "$lib/overlay";
 
-  export const label = "display-capture";
+  export const label = "game-capture";
   export const transform = {
     x: 0,
     y: 0,
@@ -12,9 +12,10 @@
   };
   export const options = {
     showPreview: field("action", "Show Preview"),
-    selectMonitor: field("action", "Select Monitor"),
+    selectGame: field("action", "Select Game"),
     enabled: field("checkbox", true),
-    inputKind: field("readonly", "monitor_capture"),
+    inputKind: field("readonly", "game_capture"),
+    allowTransparency: field("checkbox", false),
     cropLeft: field("number", 0),
     cropRight: field("number", 0),
     cropTop: field("number", 0),
@@ -54,6 +55,16 @@
       },
     });
 
+    const settings = {
+      allow_transparency: source.options.allowTransparency,
+      capture_mode: "window",
+    };
+
+    await obs.call("SetInputSettings", {
+      inputName: obsInput.label,
+      inputSettings: settings,
+    });
+
     await obs.call("SetSceneItemEnabled", {
       sceneItemEnabled: source.options.enabled,
       sceneName: scene,
@@ -69,16 +80,6 @@
 </script>
 
 <script lang="ts">
-  // export const inputKind = "monitor_capture";
-  // export let captureCursor: boolean;
-  // export let forceSDR: boolean;
-  // export let method: 0 | 1 | 2;
-
-  // export let cropLeft: number;
-  // export let cropRight: number;
-  // export let cropTop: number;
-  // export let cropBottom: number;
-
   export let preview: string = "";
 </script>
 

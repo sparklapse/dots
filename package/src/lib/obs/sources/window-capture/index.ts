@@ -1,10 +1,10 @@
-import { getInput, getInputPreview, getObs } from "$lib/obs-ws";
+import { getInput, getInputPreview, getObs } from "$lib/obs/obs";
 import { createSource } from "$lib/overlay";
-import GameCapture, { label, transform, options } from "./GameCapture.svelte";
-import GameSelect from "./GameSelect.svelte";
+import WindowCapture, { label, transform, options } from "./WindowCapture.svelte";
+import WindowSelect from "./WindowSelect.svelte";
 import type { Source } from "$lib/overlay";
 
-const gameCaptureSource = class extends createSource(GameCapture, {
+const windowCaptureSource = class extends createSource(WindowCapture, {
   transform,
   options,
 }) {
@@ -16,7 +16,7 @@ const gameCaptureSource = class extends createSource(GameCapture, {
     this.setAttribute("preview", preview);
     this.preview = preview;
   }
-  async selectGame(source: Source<{ enabled: boolean; inputKind: string }>) {
+  async selectWindow(source: Source<{ enabled: boolean; inputKind: string }>) {
     const obs = await getObs();
     const input = (await getInput(source)).cata({
       Ok: (input) => input,
@@ -25,7 +25,7 @@ const gameCaptureSource = class extends createSource(GameCapture, {
       },
     });
 
-    const games = (
+    const windows = (
       await obs.call("GetInputPropertiesListPropertyItems", {
         inputName: input.label,
         propertyName: "window",
@@ -36,16 +36,16 @@ const gameCaptureSource = class extends createSource(GameCapture, {
       value: itemValue as string,
     }));
 
-    games.unshift({
+    windows.unshift({
       enabled: false,
       label: "DUMMY",
       value: "DUMMY",
     });
 
-    const selector = new GameSelect({
+    const selector = new WindowSelect({
       target: document.body,
       props: {
-        items: games,
+        items: windows,
       },
     });
 
@@ -65,4 +65,4 @@ const gameCaptureSource = class extends createSource(GameCapture, {
   }
 };
 
-customElements.define("obs-" + label, gameCaptureSource);
+customElements.define("obs-" + label, windowCaptureSource);

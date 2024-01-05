@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import { field } from "$lib/overlay";
-  import { getObs, getDotsScene, getInput } from "$lib/obs-ws";
+  import { getObs, getDotsScene, getInput } from "$lib/obs/obs";
   import type { Source, InferFieldValues } from "$lib/overlay";
 
   export const label = "browser";

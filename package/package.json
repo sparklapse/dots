@@ -35,6 +35,18 @@
       "svelte": "./dist/overlay/index.js",
       "import": "./dist/overlay/index.js",
       "node": "./dist/overlay/index.js"
+    },
+    "./obs": {
+      "types": "./dist/obs/index.d.ts",
+      "svelte": "./dist/obs/index.js",
+      "import": "./dist/obs/index.js",
+      "node": "./dist/obs/index.js"
+    },
+    "./obs/sources": {
+      "types": "./dist/obs/sources/index.d.ts",
+      "svelte": "./dist/obs/sources/index.js",
+      "import": "./dist/obs/sources/index.js",
+      "node": "./dist/obs/sources/index.js"
     }
   },
   "files": [

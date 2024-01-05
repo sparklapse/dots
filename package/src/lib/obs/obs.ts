@@ -21,7 +21,7 @@ export const isIdentified = { subscribe: identified.subscribe } as Readable<bool
 export const connect = async (
   port: number = 4455,
   password?: string,
-  scene: string = window.__dots_obs_scene ?? "overlay",
+  scene: string = window.__dots_obs_scene?.slice(5) ?? "overlay",
 ) => {
   const obs = window.__dots_obs ?? new OBSWebSocket();
 
@@ -42,9 +42,14 @@ export const connect = async (
     identified.set(false);
   });
 
-  await obs.connect(`ws://localhost:${port}`, password, {
-    eventSubscriptions: EVENTS,
-  });
+  try {
+    await obs.connect(`ws://localhost:${port}`, password, {
+      eventSubscriptions: EVENTS,
+    });
+  } catch {
+    identified.set(false);
+    return Err("Could not connect to OBS");
+  }
 
   const { scenes } = await obs.call("GetSceneList");
   const sceneExists = scenes.some((s) => (s.sceneName as string) == "dots#" + scene);
