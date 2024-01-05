@@ -22,11 +22,11 @@
       </h2>
       <div class="relative w-4 h-48 bg-zinc-600">
         <div
-          class="absolute bottom-0 w-1/2 h-1/2 bg-zinc-400 transition-[height] duration-75"
+          class="absolute bottom-0 w-1/2 h-1/2 bg-zinc-400 transition-[height] duration-150 ease-linear"
           style="height: {meter.peak.left * 100}%;"
         ></div>
         <div
-          class="absolute bottom-0 left-1/2 w-1/2 h-1/2 bg-zinc-400 transition-[height] duration-75"
+          class="absolute bottom-0 left-1/2 w-1/2 h-1/2 bg-zinc-400 transition-[height] duration-150 ease-linear"
           style="height: {meter.peak.right * 100}%;"
         ></div>
       </div>
