@@ -9,17 +9,21 @@
     syncObsSources,
     getAudioMeters,
     ObsAudioMeters,
+    type AudioMeter,
   } from "$lib/obs";
   import { onMount } from "svelte";
   import { load, tags } from "$lib/obs/sources";
   import type { DotsSource, Source, Sources } from "$lib/overlay";
+  import type { Readable } from "svelte/store";
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
+  let audioMeters: Readable<{[key: string]: AudioMeter}>;
   let selected = -1;
 
   onMount(async () => {
     await load();
+    audioMeters = (await getAudioMeters())!;
   });
 
   const addSource = (tag: string) => {
@@ -69,7 +73,9 @@
       </div>
       <div>
         <h2 class="font-bold">Audio</h2>
-        <ObsAudioMeters />
+        <div class="flex gap-4">
+          <ObsAudioMeters meters={audioMeters} />
+        </div>
       </div>
       <div>
         <h2 class="font-bold">Components</h2>
