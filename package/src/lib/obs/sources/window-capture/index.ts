@@ -17,7 +17,12 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
     this.preview = preview;
   }
   async selectWindow(source: Source<{ enabled: boolean; inputKind: string }>) {
-    const obs = await getObs();
+    const obs = (await getObs()).cata({
+      Ok: (obs) => obs,
+      Err: () => {
+        throw new Error("Failed to get obs");
+      },
+    });
     const input = (await getInput(source)).cata({
       Ok: (input) => input,
       Err: () => {
@@ -59,7 +64,6 @@ const windowCaptureSource = class extends createSource(WindowCapture, {
         },
       });
 
-      await this.showPreview(source);
       selector.$destroy();
     });
   }

@@ -10,6 +10,7 @@
     getAudioMeters,
     ObsAudioMeters,
     type AudioMeter,
+    getObs,
   } from "$lib/obs";
   import { onMount } from "svelte";
   import { load, tags } from "$lib/obs/sources";
@@ -18,7 +19,7 @@
 
   let inspector: HTMLDivElement;
   let sources: Sources = [];
-  let audioMeters: Readable<{[key: string]: AudioMeter}>;
+  let audioMeters: Readable<{ [key: string]: AudioMeter }>;
   let selected = -1;
 
   onMount(async () => {
@@ -52,7 +53,13 @@
   };
 
   const testObs = async () => {
-    console.log(await getAudioMeters());
+    const obs = (await getObs()).cata({ Ok: (obs) => obs, Err: () => {throw new Error("Failed to get obs");}});
+    console.log(
+      await obs.call("PressInputPropertiesButton", {
+        inputName: "Dots Source#br-65988763edf0f0b98325d127-0-1",
+        propertyName: "refreshnocache",
+      }),
+    );
   };
 </script>
 

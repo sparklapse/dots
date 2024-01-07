@@ -17,7 +17,12 @@ const displayCaptureSource = class extends createSource(DisplayCapture, {
     this.preview = preview;
   }
   async selectMonitor(source: Source<{ enabled: boolean; inputKind: string }>) {
-    const obs = await getObs();
+    const obs = (await getObs()).cata({
+      Ok: (obs) => obs,
+      Err: () => {
+        throw new Error("Failed to get obs");
+      },
+    });
     const input = (await getInput(source)).cata({
       Ok: (input) => input,
       Err: () => {
@@ -59,9 +64,6 @@ const displayCaptureSource = class extends createSource(DisplayCapture, {
         },
       });
 
-      setTimeout(() => {
-        this.showPreview(source);
-      }, 500);
       selector.$destroy();
     });
   }

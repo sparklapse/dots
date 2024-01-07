@@ -24,7 +24,12 @@ declare global {
 }
 
 const setupAudio = async () => {
-  const obs = await getObs();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
   const meters = writable<AudioMeters>({});
 
   window.__dots_obs_audio = {
@@ -141,7 +146,12 @@ export const setChannelGainDb = async (channel: string, gain: number) => {
   if (gain < -100) throw new Error("Gain must be greater than -100dB");
   if (gain > 26) throw new Error("Gain must be less than 26dB");
 
-  const obs = await getObs();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
   await obs.call("SetInputVolume", {
     inputName: channel,
     inputVolumeDb: gain,
@@ -152,7 +162,12 @@ export const setChannelGainMul = async (channel: string, gain: number) => {
   if (gain < 0) throw new Error("Gain must be greater than 0");
   if (gain > 1) throw new Error("Gain must be less than 1");
 
-  const obs = await getObs();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
   await obs.call("SetInputVolume", {
     inputName: channel,
     inputVolumeMul: gain,
@@ -160,7 +175,12 @@ export const setChannelGainMul = async (channel: string, gain: number) => {
 };
 
 export const setChannelMuted = async (channel: string, muted: boolean) => {
-  const obs = await getObs();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
   await obs.call("SetInputMute", {
     inputName: channel,
     inputMuted: muted,

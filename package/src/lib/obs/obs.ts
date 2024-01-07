@@ -1,5 +1,5 @@
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js/msgpack";
-import { Err, Ok } from "pratica";
+import { Err, Ok, encaseRes } from "pratica";
 import { get, writable } from "svelte/store";
 import { syncs } from "./sources/syncs";
 import type { Result } from "pratica";
@@ -75,56 +75,24 @@ export const disconnect = async () => {
   await obs.disconnect();
 };
 
-export const getObs = () =>
-  new Promise<OBSWebSocket>((resolve, reject) => {
-    if (window.__dots_obs) {
-      resolve(window.__dots_obs);
-      return;
-    }
+export const getObs: () => Promise<Result<OBSWebSocket, unknown>> = async () => {
+  if (!get(isIdentified)) await connect();
 
-    connect();
-
-    const interval = setInterval(() => {
-      const obs = window.__dots_obs;
-
-      if (obs) {
-        clearInterval(interval);
-        resolve(obs);
-      }
-    }, 100);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      reject("OBS is not connected");
-    }, 10000);
+  return encaseRes(() => {
+    if (window.__dots_obs) return window.__dots_obs;
+    throw new Error("OBS is not connected");
   });
+};
 
-export const getDotsScene = () =>
-  new Promise<string>((resolve, reject) => {
-    if (window.__dots_obs_scene) {
-      resolve(window.__dots_obs_scene);
-      return;
-    }
+export const getDotsScene = async (): Promise<Result<string, string>> => {
+  const label = window.__dots_obs_scene?.slice(5) ?? "overlay";
 
-    connect();
-
-    const interval = setInterval(() => {
-      const scene = window.__dots_obs_scene;
-
-      if (scene) {
-        clearInterval(interval);
-        resolve(scene);
-      }
-    }, 100);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      reject("OBS is not connected");
-    }, 10000);
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
   });
-
-export const setDotsScene = async (label: string) => {
-  const obs = await getObs();
 
   if (!get(isIdentified)) return Err("OBS is not connected");
 
@@ -135,12 +103,26 @@ export const setDotsScene = async (label: string) => {
     await obs.call("CreateScene", { sceneName: "dots#" + label });
   }
 
+  return Ok("dots#" + label);
+};
+
+export const setDotsScene = async (label: string) => {
   window.__dots_obs_scene = "dots#" + label;
 };
 
 export const cleanRemoteSources = async (sources: Sources): Promise<Result<void, string>> => {
-  const obs = await getObs();
-  const scene = await getDotsScene();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
+  const scene = (await getDotsScene()).cata({
+    Ok: (scene) => scene,
+    Err: (err) => {
+      throw new Error(err);
+    },
+  });
 
   if (!get(isIdentified)) return Err("OBS is not connected");
 
@@ -184,8 +166,18 @@ export type Input = {
 export const getInput = async (
   source: Source<{ enabled: boolean; inputKind: string }>,
 ): Promise<Result<Input, string>> => {
-  const obs = await getObs();
-  const scene = await getDotsScene();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
+  const scene = (await getDotsScene()).cata({
+    Ok: (scene) => scene,
+    Err: (err) => {
+      throw new Error(err);
+    },
+  });
 
   if (!get(isIdentified)) return Err("OBS is not connected");
 
@@ -196,17 +188,30 @@ export const getInput = async (
   const exists = sceneItems.some((item) => (item.sourceName as string).endsWith(source.id));
 
   if (!exists) {
-    const { defaultInputSettings } = await obs.call("GetInputDefaultSettings", {
-      inputKind: source.options.inputKind,
-    });
+    try {
+      // Try getting input if exists in other scene
+      await obs.call("GetInputSettings", {
+        inputName: `${source.label}#${source.id}`,
+      });
 
-    await obs.call("CreateInput", {
-      inputKind: source.options.inputKind,
-      sceneName: scene,
-      inputName: `${source.label}#${source.id}`,
-      sceneItemEnabled: false,
-      inputSettings: defaultInputSettings,
-    });
+      await obs.call("CreateSceneItem", {
+        sceneName: scene,
+        sourceName: `${source.label}#${source.id}`,
+      });
+    } catch {
+      // Create new item if does not exist
+      const { defaultInputSettings } = await obs.call("GetInputDefaultSettings", {
+        inputKind: source.options.inputKind,
+      });
+
+      await obs.call("CreateInput", {
+        inputKind: source.options.inputKind,
+        sceneName: scene,
+        inputName: `${source.label}#${source.id}`,
+        sceneItemEnabled: false,
+        inputSettings: defaultInputSettings,
+      });
+    }
 
     sceneItems = (
       await obs.call("GetSceneItemList", {
@@ -234,7 +239,12 @@ export const getInput = async (
 };
 
 export const getInputPreview = async (input: Awaited<ReturnType<typeof getInput>>) => {
-  const obs = await getObs();
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
 
   if (input.isErr()) return "error";
 
@@ -250,11 +260,40 @@ export const getInputPreview = async (input: Awaited<ReturnType<typeof getInput>
   }
 };
 
-export const syncObsSources = async (sources: Source<{ inputKind: string }>[]) => {
-  for (const source of sources) {
+export const syncObsSources = async (
+  sources: Source<{ inputKind: string; enabled: boolean }>[],
+) => {
+  const obs = (await getObs()).cata({
+    Ok: (obs) => obs,
+    Err: () => {
+      throw new Error("Failed to get obs");
+    },
+  });
+  const scene = (await getDotsScene()).cata({
+    Ok: (scene) => scene,
+    Err: (err) => {
+      throw new Error(err);
+    },
+  });
+  for (let index = 0; index < sources.length; index++) {
+    const source = sources[index];
+
     const sync = syncs[source.options.inputKind];
 
     // @ts-expect-error - This should always be fine but types just aren't working
     if (sync) await sync(source);
+
+    const input = (await getInput(source)).cata({
+      Ok: (input) => input,
+      Err: () => {
+        throw new Error("Could not get input");
+      },
+    });
+
+    await obs.call("SetSceneItemIndex", {
+      sceneName: scene,
+      sceneItemId: input.itemId,
+      sceneItemIndex: index,
+    });
   }
 };

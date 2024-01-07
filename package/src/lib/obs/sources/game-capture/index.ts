@@ -17,7 +17,12 @@ const gameCaptureSource = class extends createSource(GameCapture, {
     this.preview = preview;
   }
   async selectGame(source: Source<{ enabled: boolean; inputKind: string }>) {
-    const obs = await getObs();
+    const obs = (await getObs()).cata({
+      Ok: (obs) => obs,
+      Err: () => {
+        throw new Error("Failed to get obs");
+      },
+    });
     const input = (await getInput(source)).cata({
       Ok: (input) => input,
       Err: () => {
@@ -59,7 +64,6 @@ const gameCaptureSource = class extends createSource(GameCapture, {
         },
       });
 
-      await this.showPreview(source);
       selector.$destroy();
     });
   }
