@@ -9,18 +9,17 @@
     syncObsSources,
     getAudioMeters,
     ObsAudioMeters,
-    type AudioMeter,
     getObs,
   } from "$lib/obs";
   import { onMount } from "svelte";
   import { load, tags } from "$lib/obs/sources";
   import type { DotsSource, Source, Sources } from "$lib/overlay";
   import type { Readable } from "svelte/store";
+  import type { AudioMeter } from "$lib/obs";
 
-  let inspector: HTMLDivElement;
   let sources: Sources = [];
   let audioMeters: Readable<{ [key: string]: AudioMeter }>;
-  let selected = -1;
+  let selected: number[] = [];
 
   onMount(async () => {
     await load();
@@ -47,13 +46,18 @@
   };
 
   const syncToObs = async () => {
-    await syncObsSources(sources as Source<{ inputKind: string }>[]);
+    await syncObsSources(sources as Source<{ inputKind: string; enabled: boolean }>[]);
 
     await cleanRemoteSources(sources);
   };
 
   const testObs = async () => {
-    const obs = (await getObs()).cata({ Ok: (obs) => obs, Err: () => {throw new Error("Failed to get obs");}});
+    const obs = (await getObs()).cata({
+      Ok: (obs) => obs,
+      Err: () => {
+        throw new Error("Failed to get obs");
+      },
+    });
     console.log(
       await obs.call("PressInputPropertiesButton", {
         inputName: "Dots Source#br-65988763edf0f0b98325d127-0-1",
@@ -90,7 +94,7 @@
           <button
             class="dots-btn dots-btn-maceron"
             on:click={() => {
-              selected = -1;
+              selected = [];
               sources = [];
             }}
           >
@@ -104,9 +108,9 @@
       <hr class="w-full my-4" />
       <div>
         <div class="col-span-2">
-          <Editor bind:sources bind:selected {inspector} />
+          <Editor bind:scene={sources} bind:selected />
         </div>
-        <div bind:this={inspector} />
+        <!-- <div bind:this={inspector} /> -->
       </div>
     </div>
   </div>

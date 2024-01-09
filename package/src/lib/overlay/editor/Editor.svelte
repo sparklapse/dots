@@ -1,28 +1,96 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
   import Screen from "../screen/Screen.svelte";
-  import Inspector from "./Inspector.svelte";
   import Editable from "./Editable.svelte";
   import type { Sources } from "../scene/types.js";
 
-  export let sources: Sources = [];
-  export let inspector: HTMLElement | undefined = undefined;
-  export let selected: number = -1;
+  export let scene: Sources = [];
+  export let selected: number[] = [];
 
-  let inspectorContents: HTMLDivElement;
+  let dragType: "move" | "resize" = "move";
+  let resizeCorner: "nw" | "ne" | "sw" | "se" = "nw";
+  let isDragging: boolean = false;
 
-  $: if (inspectorContents && inspector) {
-    if (inspector) inspector.appendChild(inspectorContents);
-  }
+  let reference: HTMLDivElement;
 
-  onDestroy(() => {
-    if (inspectorContents) inspectorContents.remove();
-  });
+  export const test = () => {
+    console.log("test");
+  };
+
+  const catcherDown = () => {
+    selected = [];
+  };
+
+  // TODO: Create a selection box to select multiple sources
+  const catcherMove = () => {};
 </script>
 
+<svelte:document
+  on:pointermove={(ev) => {
+    if (!isDragging) return;
+    if (ev.buttons !== 1) {
+      isDragging = false;
+      return;
+    }
+
+    let scale = parseFloat(getComputedStyle(reference).getPropertyValue("--dots-screen-scale"));
+
+    switch (dragType) {
+      case "move": {
+        for (const i of selected) {
+          scene[i].transform = {
+            ...scene[i].transform,
+            x: Math.round(scene[i].transform.x + ev.movementX / scale),
+            y: Math.round(scene[i].transform.y + ev.movementY / scale),
+          };
+        }
+        break;
+      }
+      case "resize": {
+        const transform = scene[selected[0]].transform;
+
+        let x = transform.x;
+        let width = transform.width;
+        let y = transform.y;
+        let height = transform.height;
+
+        if (resizeCorner.startsWith("n")) {
+          y += ev.movementY / scale;
+          height -= ev.movementY / scale;
+        } else {
+          height += ev.movementY / scale;
+        }
+
+        if (resizeCorner.endsWith("w")) {
+          x += ev.movementX / scale;
+          width -= ev.movementX / scale;
+        } else {
+          width += ev.movementX / scale;
+        }
+
+        x = Math.round(x);
+        y = Math.round(y);
+        width = Math.max(0, Math.round(width));
+        height = Math.max(0, Math.round(height));
+
+        scene[selected[0]].transform = {
+          ...transform,
+          x,
+          y,
+          height,
+          width,
+        };
+      }
+    }
+  }}
+  on:pointerup={(ev) => {
+    if (ev.button !== 0) return;
+    isDragging = false;
+  }}
+/>
+
 <Screen>
-  <div class="bg" />
-  {#each sources as { id, tag, transform, options }}
+  <div class="bg" bind:this={reference} />
+  {#each scene as { id, tag, transform, options }}
     <svelte:element
       this={tag}
       {id}
@@ -34,26 +102,35 @@
     />
   {/each}
   <div class="window" slot="window">
-    <div class="catch" on:pointerdown={() => (selected = -1)} />
-    {#each sources as s, i}
-      {#if !s.editor.locked}
+    <div class="catch" on:pointerdown={catcherDown} />
+    {#each scene as s, i}
+      {#if !s.editor.locked && !(isDragging && !selected.includes(i))}
         <Editable
-          selected={selected == i}
-          on:selected={() => (selected = i)}
-          bind:transform={sources[i].transform}
+          selected={selected.includes(i)}
+          transform={scene[i].transform}
+          on:selected={(ev) => {
+            if (isDragging) return;
+            if (ev.detail.additive) {
+              if (!selected.includes(i)) selected = [...selected, i];
+            } else selected = [i];
+          }}
+          on:dragstart={() => {
+            if (isDragging) return;
+            dragType = "move";
+            isDragging = true;
+          }}
+          on:resizestart={(ev) => {
+            if (isDragging) return;
+            selected = [i];
+            dragType = "resize";
+            resizeCorner = ev.detail;
+            isDragging = true;
+          }}
         />
       {/if}
     {/each}
   </div>
 </Screen>
-
-{#if selected !== -1}
-  <div class="contents" bind:this={inspectorContents}>
-    {#key selected}
-      <Inspector bind:source={sources[selected]} />
-    {/key}
-  </div>
-{/if}
 
 <style>
   .bg {

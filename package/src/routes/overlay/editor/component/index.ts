@@ -10,7 +10,10 @@ import ImageSource, {
 } from "./ImageSource.svelte";
 import { createSource } from "$lib/overlay";
 
-export const textSource = createSource(TextSource, { transform: tsTransform, options: tsOptions });
+export const textSource = createSource(TextSource, {
+  transform: tsTransform,
+  options: tsOptions,
+});
 export const imageSource = createSource(ImageSource, {
   transform: isTransform,
   options: isOptions,

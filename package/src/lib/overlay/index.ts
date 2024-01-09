@@ -1,7 +1,8 @@
 import Screen from "./screen/Screen.svelte";
 import Editor from "./editor/Editor.svelte";
+import Inspector from "./editor/Inspector.svelte";
 
-export { Screen, Editor };
+export { Screen, Editor, Inspector };
 export { field } from "./field/index.js";
 export { createSource } from "./scene/source.js";
 export type { DotsSource } from "./scene/source.js";

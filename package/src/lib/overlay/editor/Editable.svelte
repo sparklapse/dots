@@ -1,11 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  let editable: HTMLDivElement;
-  let isDragging: boolean = false;
-  let dragType: "move" | "resize";
-  let dragCorner: "nw" | "ne" | "sw" | "se";
-
   export let selected: boolean = false;
   export let transform: {
     x: number;
@@ -14,101 +9,32 @@
     height: number;
   };
 
-  const dispatch = createEventDispatcher<{ selected: void }>();
-
-  const dragHandle = (type: typeof dragType, corner?: typeof dragCorner) => {
-    return (
-      ev: PointerEvent & {
-        currentTarget: EventTarget & HTMLDivElement;
-      },
-    ) => {
-      if (ev.button !== 0) return;
-
-      dragType = type;
-      if (type === "resize") {
-        ev.stopPropagation();
-        if (!corner) throw Error("Corner must be provided when resizing");
-        dragCorner = corner!;
-      }
-      isDragging = true;
-    };
-  };
+  const dispatch = createEventDispatcher<{
+    selected: { additive: boolean };
+    dragstart: void;
+    resizestart: "nw" | "ne" | "sw" | "se";
+  }>();
 </script>
 
-<svelte:document
-  on:pointermove={(ev) => {
-    if (!isDragging) return;
-    if (ev.buttons !== 1) {
-      isDragging = false;
-      return;
-    }
-
-    let scale = parseFloat(getComputedStyle(editable).getPropertyValue("--dots-screen-scale"));
-
-    switch (dragType) {
-      case "move": {
-        transform = {
-          ...transform,
-          x: Math.round(transform.x + ev.movementX / scale),
-          y: Math.round(transform.y + ev.movementY / scale),
-        };
-        break;
-      }
-      case "resize": {
-        let x = transform.x;
-        let width = transform.width;
-        let y = transform.y;
-        let height = transform.height;
-
-        if (dragCorner.startsWith("n")) {
-          y += ev.movementY / scale;
-          height -= ev.movementY / scale;
-        } else {
-          height += ev.movementY / scale;
-        }
-
-        if (dragCorner.endsWith("w")) {
-          x += ev.movementX / scale;
-          width -= ev.movementX / scale;
-        } else {
-          width += ev.movementX / scale;
-        }
-
-        x = Math.round(x);
-        y = Math.round(y);
-        width = Math.max(0, Math.round(width));
-        height = Math.max(0, Math.round(height));
-
-        transform = {
-          ...transform,
-          x,
-          y,
-          height,
-          width,
-        };
-      }
-    }
-  }}
-  on:pointerup={(ev) => {
-    if (ev.button !== 0) return;
-    isDragging = false;
-  }}
-/>
-
 <div
-  class={"editable" + (selected || isDragging ? " selected" : "")}
+  class={"editable" + (selected ? " selected" : "")}
   style:left={`calc(${transform.x}px * var(--dots-screen-scale))`}
   style:top={`calc(${transform.y}px * var(--dots-screen-scale))`}
   style:width={`calc(${transform.width}px * var(--dots-screen-scale))`}
   style:height={`calc(${transform.height}px * var(--dots-screen-scale))`}
   on:pointerdown={(ev) => {
-    dispatch("selected");
-    dragHandle("move")(ev);
+    if (ev.button == 0 && !selected) dispatch("selected", { additive: ev.shiftKey });
   }}
-  bind:this={editable}
+  on:pointermove={(ev) => {
+    if (ev.buttons !== 1) return;
+    dispatch("dragstart");
+  }}
+  on:pointerup={(ev) => {
+    if (ev.button == 0 && selected) dispatch("selected", { additive: ev.shiftKey });
+  }}
 >
   <div
-    on:pointerdown={dragHandle("resize", "nw")}
+    on:pointerdown={() => dispatch("resizestart", "nw")}
     class="resizeHandle"
     style:top="0"
     style:left="0"
@@ -116,7 +42,7 @@
     style:cursor="nw-resize"
   />
   <div
-    on:pointerdown={dragHandle("resize", "ne")}
+    on:pointerdown={() => dispatch("resizestart", "ne")}
     class="resizeHandle"
     style:top="0"
     style:right="0"
@@ -124,7 +50,7 @@
     style:cursor="ne-resize"
   />
   <div
-    on:pointerdown={dragHandle("resize", "sw")}
+    on:pointerdown={() => dispatch("resizestart", "sw")}
     class="resizeHandle"
     style:bottom="0"
     style:left="0"
@@ -132,7 +58,7 @@
     style:cursor="sw-resize"
   />
   <div
-    on:pointerdown={dragHandle("resize", "se")}
+    on:pointerdown={() => dispatch("resizestart", "se")}
     class="resizeHandle"
     style:bottom="0"
     style:right="0"

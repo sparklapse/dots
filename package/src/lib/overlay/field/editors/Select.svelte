@@ -10,7 +10,7 @@
 
 <div class="flex justify-between">
   <label class="capitalize" for={label}>{label}</label>
-  <Dropdown class="dots-input">
+  <Dropdown class="dots-input min-w-[10rem]">
     <span>{items[selected].label}</span>
     <div class="bg-white shadow w-full" slot="dropdown">
       <div class="h-full max-h-[20rem] overflow-y-auto scrollbar-thin">
