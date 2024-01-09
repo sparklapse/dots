@@ -78,6 +78,7 @@
     transition-property: opacity;
     transition-duration: 0.15s;
     transition-timing-function: ease-in-out;
+    user-select: none;
   }
 
   .editable:hover,

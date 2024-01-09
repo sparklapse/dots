@@ -12,10 +12,6 @@
 
   let reference: HTMLDivElement;
 
-  export const test = () => {
-    console.log("test");
-  };
-
   const catcherDown = () => {
     selected = [];
   };
